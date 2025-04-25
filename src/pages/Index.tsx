@@ -5,7 +5,9 @@ import StatCard from "@/components/StatCard";
 import QuotaCircle from "@/components/QuotaCircle";
 import OrdersTable from "@/components/OrdersTable";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toaster";
+// Remove the next line:
+// import { toast } from "@/components/ui/toaster";
+import { toast } from "@/hooks/use-toast";
 import React, { useState } from "react";
 
 const PRENOM = "Clara";

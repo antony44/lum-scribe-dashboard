@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -68,6 +67,11 @@ const navItems = [
     label: "Settings",
     path: "/settings",
     icon: Settings,
+  },
+  {
+    label: "Commandes",
+    path: "/orders-history",
+    icon: List,
   },
 ];
 

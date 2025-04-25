@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +18,7 @@ import Account from "./pages/Account";
 import Support from "./pages/Support";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import OrdersHistoryPage from "./pages/OrdersHistory";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +46,7 @@ const App = () => (
                 <Route path="/account" element={<Account />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/orders-history" element={<OrdersHistoryPage />} />
                 {/* Catch-all */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
@@ -60,4 +61,3 @@ const App = () => (
 );
 
 export default App;
-

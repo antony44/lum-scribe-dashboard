@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -18,6 +17,7 @@ const mobileNav = [
   { label: "Articles", path: "/articles", icon: List },
   { label: "Analytics", path: "/analytics", icon: ChartBar },
   { label: "Profile", path: "/account", icon: User },
+  { label: "Commandes", path: "/orders-history", icon: List },
 ];
 
 export default function BottomNav() {

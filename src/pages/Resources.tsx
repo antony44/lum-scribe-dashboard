@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,7 +19,6 @@ const Resources = () => {
             <TabsTrigger value="guides">Guides SEO</TabsTrigger>
             <TabsTrigger value="tutorials">Tutoriels</TabsTrigger>
             <TabsTrigger value="examples">Exemples</TabsTrigger>
-            <TabsTrigger value="faq">FAQ</TabsTrigger>
           </TabsList>
           
           <TabsContent value="guides" className="space-y-6">
@@ -28,7 +26,7 @@ const Resources = () => {
               <CardHeader>
                 <CardTitle>Guides SEO</CardTitle>
                 <CardDescription>
-                  Optimisez votre contenu avec nos guides SEO experts
+                  Optimisez votre contenu grâce à nos guides experts
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -36,7 +34,7 @@ const Resources = () => {
                   <div className="space-y-6">
                     <ResourceCard 
                       title="Structure optimale d'un article" 
-                      description="Découvrez comment structurer vos articles pour maximiser leur impact SEO et l'expérience utilisateur."
+                      description="Découvrez comment structurer vos articles pour maximiser leur impact et l'expérience utilisateur."
                       author="Équipe LÜM"
                       date="12 Avril 2025"
                       readTime="8 min"
@@ -44,7 +42,7 @@ const Resources = () => {
                     
                     <ResourceCard 
                       title="Les meilleures pratiques SEO 2025" 
-                      description="Un guide complet des techniques SEO les plus efficaces pour cette année, incluant les dernières mises à jour des algorithmes."
+                      description="Un guide complet des techniques SEO les plus efficaces pour cette année."
                       author="Équipe LÜM"
                       date="3 Mars 2025"
                       readTime="12 min"
@@ -56,14 +54,6 @@ const Resources = () => {
                       author="Équipe LÜM"
                       date="25 Février 2025"
                       readTime="6 min"
-                    />
-                    
-                    <ResourceCard 
-                      title="Balises méta et SEO technique" 
-                      description="Guide détaillé sur l'optimisation des balises méta, des URL et des aspects techniques du SEO."
-                      author="Équipe LÜM"
-                      date="18 Février 2025"
-                      readTime="9 min"
                     />
                   </div>
                 </ScrollArea>
@@ -83,16 +73,16 @@ const Resources = () => {
                 <ScrollArea className="h-[400px] pr-4">
                   <div className="space-y-6">
                     <ResourceCard 
-                      title="Créer un brief parfait avec LÜM" 
-                      description="Apprenez à formuler des briefs qui génèrent des articles de grande qualité."
+                      title="Créer un brief parfait" 
+                      description="Apprenez à formuler des briefs qui aboutissent à des articles de grande qualité."
                       author="Support LÜM"
                       date="15 Avril 2025"
                       readTime="7 min"
                     />
                     
                     <ResourceCard 
-                      title="Utiliser l'IA pour générer du contenu" 
-                      description="Guide pas à pas pour exploiter pleinement nos outils d'IA."
+                      title="Utiliser notre technologie pour créer du contenu" 
+                      description="Guide pas à pas pour exploiter pleinement les outils LÜM."
                       author="Support LÜM"
                       date="10 Avril 2025"
                       readTime="10 min"
@@ -116,7 +106,7 @@ const Resources = () => {
               <CardHeader>
                 <CardTitle>Exemples</CardTitle>
                 <CardDescription>
-                  Exemples de contenus générés avec LÜM
+                  Exemples de contenus créés avec LÜM
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -139,47 +129,11 @@ const Resources = () => {
                     />
                     
                     <ResourceCard 
-                      title="FAQ sur l'intelligence artificielle" 
-                      description="Un exemple de FAQ bien structurée sur l'IA et ses applications business."
+                      title="Guide complet sur les tendances digitales" 
+                      description="Un exemple de guide structuré sur les tendances actuelles du digital."
                       author="Équipe LÜM"
                       date="10 Avril 2025"
                       readTime="3 min"
-                    />
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="faq" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Questions fréquentes</CardTitle>
-                <CardDescription>
-                  Réponses aux questions les plus posées
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[400px] pr-4">
-                  <div className="space-y-6">
-                    <FAQItem 
-                      question="Comment fonctionne la génération IA ?" 
-                      answer="Notre IA analyse votre brief et le contexte pour créer un contenu sur mesure. Elle s'appuie sur des données structurées et les meilleures pratiques SEO pour générer un article optimisé pour votre audience et les moteurs de recherche."
-                    />
-                    
-                    <FAQItem 
-                      question="Pourquoi certaines options sont grisées ?" 
-                      answer="Ces fonctionnalités sont disponibles dans les forfaits supérieurs. Les options comme le choix de ton ou les types de contenus avancés sont réservées aux forfaits Pro, Avancé ou Expert pour garantir une expérience premium."
-                    />
-                    
-                    <FAQItem 
-                      question="Combien de temps pour recevoir mon article ?" 
-                      answer="La plupart des articles sont livrés sous 48 heures. Les articles plus complexes ou lors de périodes de forte demande peuvent prendre jusqu'à 72 heures. Vous recevrez une notification dès que votre contenu sera prêt."
-                    />
-                    
-                    <FAQItem 
-                      question="Puis-je modifier mon article après réception ?" 
-                      answer="Absolument. Vous pouvez demander jusqu'à 3 révisions gratuites dans les 7 jours suivant la réception de votre article. Notre équipe traitera vos demandes de modification rapidement."
                     />
                   </div>
                 </ScrollArea>

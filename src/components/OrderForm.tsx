@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
 import { Input } from "@/components/ui/input";
@@ -175,9 +175,11 @@ export default function OrderForm() {
   };
   
   const addInternalLink = () => {
-    if (newLink.title && newLink.url) {
+    if (newLink.title && newLink.url && internalLinks.length < 10) {
       setInternalLinks([...internalLinks, { ...newLink }]);
       setNewLink({ title: "", url: "" });
+    } else if (internalLinks.length >= 10) {
+      toast.error("Vous ne pouvez pas ajouter plus de 10 liens internes");
     }
   };
   
@@ -557,17 +559,17 @@ export default function OrderForm() {
                   name="internalLinks"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="block mb-1">Liens internes à inclure (si possible et pertinent)</FormLabel>
-                      <div className="flex flex-col gap-2">
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+                      <FormLabel className="block mb-2">Liens internes à inclure (si possible et pertinent)</FormLabel>
+                      <div className="flex flex-col gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                           <Input
-                            placeholder="Texte d'ancrage"
+                            placeholder="Titre du lien interne"
                             className="md:col-span-2"
                             value={newLink.title}
                             onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
                           />
                           <Input
-                            placeholder="URL du lien"
+                            placeholder="URL du lien interne"
                             className="md:col-span-2"
                             value={newLink.url}
                             onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
@@ -575,7 +577,7 @@ export default function OrderForm() {
                           <Button 
                             type="button"
                             onClick={addInternalLink}
-                            disabled={!newLink.title || !newLink.url}
+                            disabled={!newLink.title || !newLink.url || internalLinks.length >= 10}
                             className="w-full md:w-auto btn-hover-animation"
                             variant="outline"
                           >
@@ -584,9 +586,12 @@ export default function OrderForm() {
                         </div>
 
                         {internalLinks.length > 0 && (
-                          <div className="mt-2 border rounded-md p-2 dark:border-zinc-800 space-y-2">
+                          <div className="mt-1 border rounded-md p-3 dark:border-zinc-800 space-y-2">
+                            <div className="text-sm text-muted-foreground mb-2">
+                              {internalLinks.length}/10 liens ajoutés
+                            </div>
                             {internalLinks.map((link, index) => (
-                              <div key={index} className="flex items-center justify-between text-sm p-1.5 bg-zinc-50 dark:bg-zinc-900 rounded">
+                              <div key={index} className="flex items-center justify-between text-sm p-2 bg-zinc-50 dark:bg-zinc-900 rounded">
                                 <div className="truncate flex-1 mr-2">
                                   <span className="font-medium">{link.title}</span>
                                   <span className="mx-1">→</span>

@@ -1,15 +1,24 @@
 
 import React from "react";
 import OrderForm from "@/components/OrderForm";
+import ContextHelpSidebar from "@/components/ContextHelpSidebar";
 
 const Order = () => (
   <div className="h-full min-h-screen w-full bg-background dark:bg-[#161C24] font-inter flex flex-col items-stretch">
     <div className="w-full max-w-4xl mx-auto py-10 px-2 sm:px-8">
       <h1 className="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-2 text-foreground">
-        Commander un article
+        Créer votre Article
       </h1>
       <div className="h-1 w-28 bg-[#0061E0] rounded-full mb-8" />
-      <OrderForm />
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="col-span-1 md:col-span-2">
+          <OrderForm />
+        </div>
+        <div className="col-span-1 order-first md:order-last mb-6 md:mb-0">
+          <ContextHelpSidebar className="sticky top-6" />
+        </div>
+      </div>
     </div>
   </div>
 );

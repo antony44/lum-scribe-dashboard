@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
@@ -40,6 +41,28 @@ import {
   Trash2, 
   RefreshCw
 } from "lucide-react";
+
+// Add type definition for OrderFormValues
+interface OrderFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  company: string;
+  website: string;
+  category: string;
+  companyContext: string;
+  objective: string;
+  topic: string;
+  tones: string[];
+  contentType: string;
+  authority: string;
+  internalLinks: { title: string, url: string }[];
+  bannedTopics: string;
+  useEmojis: string;
+  useHtml: boolean;
+  htmlType: string;
+  confirmed: boolean;
+}
 
 const USER_PLAN = {
   articlesPerMonth: 4, 

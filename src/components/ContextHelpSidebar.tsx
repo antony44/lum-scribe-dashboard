@@ -10,20 +10,16 @@ export default function ContextHelpSidebar({ className = "" }: { className?: str
 
   return (
     <Card className={`dark:bg-[#202837] border-zinc-200 dark:border-zinc-800 overflow-hidden ${className}`}>
-      <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between">
-        <h3 className="text-base font-semibold">Besoin d'aide ?</h3>
-        <CollapsibleTrigger 
-          asChild 
-          className="md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-            {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-          </Button>
-        </CollapsibleTrigger>
-      </CardHeader>
+      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="md:block">
+        <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between">
+          <h3 className="text-base font-semibold">Besoin d'aide ?</h3>
+          <CollapsibleTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+              {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+          </CollapsibleTrigger>
+        </CardHeader>
 
-      <Collapsible open={isOpen} className="md:block">
         <CollapsibleContent className="md:block">
           <CardContent className="p-4 pt-0">
             <div className="space-y-4 text-sm">

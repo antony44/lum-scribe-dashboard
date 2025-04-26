@@ -102,10 +102,30 @@
   }
   
   .dark-input {
-    @apply bg-input text-foreground border-border;
+    @apply bg-background text-foreground border-border;
   }
   
   .dark-chart {
     @apply dark:bg-transparent dark:text-foreground;
+  }
+
+  .dark-table {
+    @apply dark:bg-card dark:text-card-foreground;
+  }
+
+  .dark-hover-focus {
+    @apply dark:hover:bg-secondary dark:focus:bg-secondary;
+  }
+
+  .dark-stats-card {
+    @apply dark:bg-card dark:text-card-foreground dark:border-border;
+  }
+
+  .dark-form-input {
+    @apply dark:bg-background dark:text-foreground dark:border-input;
+  }
+
+  .dark-button {
+    @apply dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80;
   }
 }

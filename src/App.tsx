@@ -25,7 +25,7 @@ const App = () => (
       <BrowserRouter>
         <Toaster />
         <Sonner />
-        <div className="flex min-h-screen w-full bg-[#F6F8FA]">
+        <div className="flex min-h-screen w-full bg-[#F6F8FA] dark:bg-gray-900">
           <LumSidebar />
           <main className="flex-1 ml-0 md:ml-64 min-h-screen relative p-6">
             <Routes>
@@ -49,4 +49,3 @@ const App = () => (
 );
 
 export default App;
-

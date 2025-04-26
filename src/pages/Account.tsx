@@ -8,7 +8,6 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { toast } from "@/components/ui/sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Shield, AlertTriangle } from "lucide-react";
-import TopBar from "@/components/TopBar";
 import AccountProfileCard from "@/components/account/AccountProfileCard";
 import AccountSecurityCard from "@/components/account/AccountSecurityCard";
 import AccountSubscriptionCard from "@/components/account/AccountSubscriptionCard";
@@ -18,8 +17,6 @@ import AccountActionsCard from "@/components/account/AccountActionsCard";
 const Account = () => {
   return (
     <div className="container mx-auto py-6">
-      <TopBar />
-      
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">Mon compte</h1>
         <p className="text-muted-foreground">Gérez vos informations personnelles et vos préférences.</p>

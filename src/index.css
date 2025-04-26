@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -46,41 +45,41 @@
   }
 
   .dark {
-    --background: 222.2 47.4% 11.2%;
+    --background: 215 29% 11%;
     --foreground: 210 40% 98%;
-
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
     
-    --sidebar-background: 224 71.4% 4.1%;
+    --card: 215 29% 11%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 215 29% 11%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 224.3 76.3% 48%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 217 23% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217 23% 17%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217 23% 17%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217 23% 17%;
+    --input: 217 23% 17%;
+    --ring: 224.3 76.3% 48%;
+
+    --sidebar-background: 215 29% 11%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent: 217 23% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-border: 217 23% 17%;
     --sidebar-ring: 224.3 76.3% 48%;
   }
 }
@@ -131,34 +130,38 @@
   
   /* Additional premium dark mode styles to fix remaining white/light components */
   .dark .dark-mode-card {
-    @apply bg-[#161C24] border-[#202837]/50;
+    @apply bg-[#161C24] border-[#202837]/50 dark:bg-[#161C24] dark:border-[#202837]/50;
   }
   
   .dark .dark-mode-elevated {
-    @apply bg-[#202837] border-[#202837]/70;
+    @apply bg-[#202837] border-[#202837]/70 dark:bg-[#202837] dark:border-[#202837]/70;
   }
   
   .dark .dark-mode-input {
-    @apply bg-[#161C24] border-[#202837] text-white;
+    @apply bg-[#161C24] border-[#202837] text-white dark:bg-[#161C24] dark:border-[#202837] dark:text-white;
   }
   
   .dark .dark-mode-hover:hover {
-    @apply bg-[#202837];
+    @apply bg-[#202837] dark:hover:bg-[#202837];
   }
   
   .dark .dark-mode-accent {
-    @apply text-[#0061E0];
+    @apply text-[#0061E0] dark:text-[#0061E0];
+  }
+  
+  .dark .dark-mode-danger {
+    @apply dark:text-[#B91226];
   }
   
   .dark .dark-mode-container {
-    @apply bg-[#161C24];
+    @apply bg-[#161C24] dark:bg-[#161C24];
   }
   
   .dark .dark-mode-text {
-    @apply text-gray-200;
+    @apply text-gray-200 dark:text-gray-200;
   }
   
   .dark .dark-mode-muted {
-    @apply text-gray-400;
+    @apply text-gray-400 dark:text-gray-400;
   }
 }

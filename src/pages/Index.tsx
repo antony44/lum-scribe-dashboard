@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import StatCard from "@/components/StatCard";
 import QuotaCircle from "@/components/QuotaCircle";
@@ -28,21 +27,18 @@ export default function Index() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-background text-foreground font-inter">
+    <div className="flex flex-col min-h-screen w-full bg-background dark:bg-[#161C24] text-foreground font-inter">
       <div className="flex flex-col-reverse lg:flex-row gap-6 lg:gap-8 px-2 lg:px-8 py-4 w-full animate-fade-in">
-        {/* Left: Welcome + stats + CTA */}
         <div className="flex-1 min-w-0">
-          {/* Welcome card */}
           <div className="dark-mode-card rounded-xl border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1">
-            <div className="text-2xl font-semibold mb-2 flex items-center text-foreground">
+            <div className="text-2xl font-semibold mb-2 flex items-center text-foreground dark:text-white">
               <span className="mr-2 text-2xl">👋</span>
               <span>Bonjour {PRENOM}&nbsp;!</span>
             </div>
-            <div className="text-muted-foreground mb-2">
-              Il vous reste <span className="font-semibold text-blue-600 dark:text-blue-400">{ARTICLES_RESTANT} articles</span> sur le plan <span className="font-semibold">{PLAN}</span>.<br />
+            <div className="text-muted-foreground dark:text-gray-400 mb-2">
+              Il vous reste <span className="font-semibold text-[#0061E0]">{ARTICLES_RESTANT} articles</span> sur le plan <span className="font-semibold dark:text-white">{PLAN}</span>.<br />
               Passez au niveau supérieur pour plus de contenu !
             </div>
-            {/* Stats cards */}
             <div className="flex flex-col xs:flex-row gap-3 my-3">
               <StatCard
                 value={ARTICLES_GEN}
@@ -64,7 +60,7 @@ export default function Index() {
             </div>
             <Button
               onClick={handleOrder}
-              className="w-full lg:w-auto mt-4 text-base py-3"
+              className="w-full lg:w-auto mt-4 text-base py-3 dark:bg-[#0061E0] dark:text-white dark:hover:bg-[#0061E0]/90"
               disabled={loading}
               variant="default"
             >
@@ -79,14 +75,10 @@ export default function Index() {
             </Button>
           </div>
         </div>
-
-        {/* Right: Quota progress circle */}
         <div className="w-full md:w-auto flex justify-center items-center">
           <QuotaCircle percent={QUOTA_POURCENT} />
         </div>
       </div>
-
-      {/* Table: Historique des commandes */}
       <div className="px-2 lg:px-8 pb-10 w-full">
         <OrdersTable />
       </div>

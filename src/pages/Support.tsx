@@ -32,7 +32,7 @@ const Support = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Formulaire de contact */}
         <div className="md:col-span-2">
-          <Card className="dark-mode-card">
+          <Card className="bg-card border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-card-foreground">Contactez-nous</CardTitle>
               <CardDescription className="text-muted-foreground">
@@ -45,17 +45,17 @@ const Support = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-foreground">Nom</Label>
-                      <Input id="name" placeholder="Votre nom" required className="dark-mode-input" />
+                      <Input id="name" placeholder="Votre nom" required className="dark-form-input" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-foreground">Email</Label>
-                      <Input id="email" type="email" placeholder="votre@email.com" required className="dark-mode-input" />
+                      <Input id="email" type="email" placeholder="votre@email.com" required className="dark-form-input" />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="subject" className="text-foreground">Sujet</Label>
-                    <Input id="subject" placeholder="Sujet de votre demande" required className="dark-mode-input" />
+                    <Input id="subject" placeholder="Sujet de votre demande" required className="dark-form-input" />
                   </div>
                   
                   <div className="space-y-2">
@@ -64,7 +64,7 @@ const Support = () => {
                       id="message" 
                       placeholder="Décrivez votre problème en détail..." 
                       required 
-                      className="min-h-[150px] dark-mode-input" 
+                      className="min-h-[150px] dark-form-input" 
                     />
                   </div>
                   
@@ -93,7 +93,7 @@ const Support = () => {
                   <Button 
                     variant="outline" 
                     onClick={() => setSubmitted(false)}
-                    className="mt-4 dark:border-[#202837] dark:bg-[#161C24] dark:text-white dark:hover:bg-[#202837]"
+                    className="mt-4"
                   >
                     Envoyer une autre demande
                   </Button>
@@ -105,7 +105,7 @@ const Support = () => {
         
         {/* Informations de contact et FAQ */}
         <div className="space-y-6">
-          <Card className="dark-mode-card">
+          <Card className="bg-card border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-card-foreground">Informations de contact</CardTitle>
             </CardHeader>
@@ -127,7 +127,7 @@ const Support = () => {
             </CardContent>
           </Card>
           
-          <Card className="dark-mode-card">
+          <Card className="bg-card border-border">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-card-foreground">
                 <HelpCircle className="h-5 w-5" />
@@ -145,7 +145,7 @@ const Support = () => {
                   <p className="text-muted-foreground">Allez dans "Mon Compte" puis "Abonnement".</p>
                 </div>
                 <div className="pt-2">
-                  <Button variant="outline" size="sm" asChild className="w-full dark:border-[#202837] dark:bg-[#161C24] dark:text-white dark:hover:bg-[#202837]">
+                  <Button variant="outline" size="sm" asChild className="w-full dark-button">
                     <a href="/faq">Voir toutes les FAQ</a>
                   </Button>
                 </div>

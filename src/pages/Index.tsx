@@ -33,7 +33,7 @@ export default function Index() {
         {/* Left: Welcome + stats + CTA */}
         <div className="flex-1 min-w-0">
           {/* Welcome card */}
-          <div className="dark-mode-card rounded-xl border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1">
+          <div className="bg-card dark:bg-card text-card-foreground dark:text-card-foreground rounded-xl border border-border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1">
             <div className="text-2xl font-semibold mb-2 flex items-center text-foreground">
               <span className="mr-2 text-2xl">👋</span>
               <span>Bonjour {PRENOM}&nbsp;!</span>

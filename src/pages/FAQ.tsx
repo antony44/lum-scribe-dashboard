@@ -102,19 +102,19 @@ const FAQ = () => {
           placeholder="Rechercher dans les FAQ..." 
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 dark-mode-input"
+          className="pl-10 dark-form-input"
         />
       </div>
 
       {filteredFAQ.length === 0 ? (
-        <Card className="dark-mode-card">
+        <Card className="bg-card">
           <CardContent className="py-8 text-center">
             <p className="text-muted-foreground">Aucun résultat trouvé pour "{searchTerm}".</p>
           </CardContent>
         </Card>
       ) : (
         filteredFAQ.map((category, catIndex) => (
-          <Card key={catIndex} className="dark-mode-card mb-8">
+          <Card key={catIndex} className="bg-card mb-8">
             <CardHeader>
               <CardTitle className="text-card-foreground">{category.title}</CardTitle>
               <CardDescription className="text-muted-foreground">

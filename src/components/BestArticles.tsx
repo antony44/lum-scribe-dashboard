@@ -13,9 +13,9 @@ interface BestArticlesProps {
 
 const BestArticles = ({ articles }: BestArticlesProps) => {
   return (
-    <Card className="dark-mode-card rounded-xl border shadow-sm">
+    <Card className="bg-white rounded-xl border shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg font-medium text-card-foreground">
+        <CardTitle className="text-lg font-medium">
           Articles les plus performants
         </CardTitle>
       </CardHeader>
@@ -23,10 +23,10 @@ const BestArticles = ({ articles }: BestArticlesProps) => {
         <ul className="space-y-4">
           {articles.map((article) => (
             <li key={article.id} className="flex items-start">
-              <span className="text-lg font-bold text-blue-600 dark:text-blue-400 mr-2">
+              <span className="text-lg font-bold text-blue-600 mr-2">
                 {article.id}
               </span>
-              <span className="font-medium text-foreground">{article.title}</span>
+              <span className="font-medium">{article.title}</span>
             </li>
           ))}
         </ul>

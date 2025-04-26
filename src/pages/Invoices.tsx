@@ -21,7 +21,7 @@ const Invoices = () => {
         <p className="text-muted-foreground">Gérez vos factures et vos paiements.</p>
       </div>
       
-      <Card className="dark-mode-card border-border">
+      <Card className="bg-card border-border">
         <CardHeader>
           <CardTitle className="text-card-foreground">Historique de facturation</CardTitle>
         </CardHeader>
@@ -51,7 +51,7 @@ const Invoices = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      className="dark:border-[#202837] dark:bg-[#161C24] dark:text-white dark:hover:bg-[#202837]"
+                      className="dark-button"
                     >
                       <Download className="h-4 w-4 mr-2" /> 
                       Télécharger

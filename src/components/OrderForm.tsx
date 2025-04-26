@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
@@ -42,7 +41,6 @@ import {
   RefreshCw
 } from "lucide-react";
 
-// Add type definition for OrderFormValues
 interface OrderFormValues {
   firstName: string;
   lastName: string;
@@ -62,6 +60,7 @@ interface OrderFormValues {
   useHtml: boolean;
   htmlType: string;
   confirmed: boolean;
+  otherObjective?: string;
 }
 
 const USER_PLAN = {
@@ -71,16 +70,16 @@ const USER_PLAN = {
 
 const OBJECTIVES = [
   { value: "pillar", label: "Faire un article pilier" },
+  { value: "news", label: "Créer un Article d'actualité" },
   { value: "seo", label: "Améliorer le référencement" },
   { value: "authority", label: "Établir une autorité" },
+  { value: "trend", label: "Créer un Article sur une tendance" },
   { value: "expertise", label: "Transmettre une expertise" },
-  { value: "faq", label: "Répondre à une question fréquente" },
-  { value: "status", label: "Faire un état des lieux d'un sujet" },
-  { value: "news", label: "Synthétiser une actualité" },
   { value: "technical", label: "Expliquer un concept technique" },
-  { value: "trend", label: "Démystifier une tendance" },
+  { value: "demystify", label: "Démystifier une tendance" },
   { value: "lead_generation", label: "Capturer des leads" },
-  { value: "education", label: "Éduquer le marché" }
+  { value: "education", label: "Éduquer le marché" },
+  { value: "other", label: "Autre" }
 ];
 
 const TONE_OPTIONS = [
@@ -136,6 +135,7 @@ export default function OrderForm() {
       useHtml: false,
       htmlType: "embed",
       confirmed: false,
+      otherObjective: "",
     }
   });
   
@@ -356,6 +356,7 @@ export default function OrderForm() {
               <FormField
                 control={form.control}
                 name="objective"
+                rules={{ required: "L'objectif est requis" }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
@@ -371,10 +372,7 @@ export default function OrderForm() {
                     </FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger 
-                          className={USER_PLAN.articlesPerMonth < 4 ? "opacity-60 cursor-not-allowed" : ""}
-                          disabled={USER_PLAN.articlesPerMonth < 4}
-                        >
+                        <SelectTrigger>
                           <SelectValue placeholder="Sélectionner un objectif" />
                         </SelectTrigger>
                       </FormControl>
@@ -386,14 +384,30 @@ export default function OrderForm() {
                         ))}
                       </SelectContent>
                     </Select>
-                    {USER_PLAN.articlesPerMonth < 4 && (
-                      <FormDescription className="text-xs text-amber-600 dark:text-amber-400">
-                        Débloquez avec le pack Pro (4+ articles/mois)
-                      </FormDescription>
-                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+              
+              {form.watch("objective") === "other" && (
+                <FormField
+                  control={form.control}
+                  name="otherObjective"
+                  rules={{ required: "Veuillez justifier votre choix d'objectif" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Précisez votre objectif</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Décrivez l'objectif spécifique de votre article..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               
               <FormField
                 control={form.control}

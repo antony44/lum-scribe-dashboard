@@ -187,10 +187,10 @@ export default function OrderForm() {
 
   return (
     <Card className="w-full shadow-md dark:bg-[#161C24] border-zinc-200 dark:border-zinc-800">
-      <CardContent className="p-6">
+      <CardContent className="p-6 space-y-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div>
+            <div className="space-y-4">
               <h2 className="text-lg font-semibold mb-4 pb-2 border-b dark:border-zinc-800">
                 Informations de base
               </h2>
@@ -224,7 +224,7 @@ export default function OrderForm() {
                 />
               </div>
               
-              <div className="mt-4">
+              <div className="mt-6">
                 <FormField
                   control={form.control}
                   name="email"
@@ -241,7 +241,7 @@ export default function OrderForm() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <FormField
                   control={form.control}
                   name="company"
@@ -277,438 +277,440 @@ export default function OrderForm() {
               </div>
             </div>
 
-            <div>
+            <div className="space-y-6">
               <h2 className="text-lg font-semibold mb-4 pb-2 border-b dark:border-zinc-800">
                 Spécifications de l'article
               </h2>
               
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Souhaitez-vous sélectionner une catégorie ?</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Sélectionner une catégorie" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="marketing">Marketing Digital</SelectItem>
-                        <SelectItem value="seo">SEO</SelectItem>
-                        <SelectItem value="content">Content Marketing</SelectItem>
-                        <SelectItem value="social">Réseaux sociaux</SelectItem>
-                        <SelectItem value="tech">Technologie</SelectItem>
-                        <SelectItem value="business">Business & Stratégie</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="companyContext"
-                rules={{ required: "Le contexte de l'entreprise est requis" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      Contexte de l'entreprise <span className="text-[#B91226]">*</span>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button 
-                            size="icon"
-                            variant="ghost"
-                            className="h-5 w-5 rounded-full p-0"
-                            type="button"
-                            onClick={() => generating !== "companyContext" && generateWithAI("companyContext")}
-                            disabled={generating === "companyContext" || (!form.getValues("website") && !form.getValues("company"))}
-                          >
-                            {generating === "companyContext" ? (
-                              <div className="h-4 w-4 rounded-full border-2 border-t-transparent border-[#0061E0] animate-spin" />
-                            ) : (
-                              <Star className="h-4 w-4 text-[#0061E0]" />
-                            )}
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                          Utilisez l'icône ✨ pour insérer un modèle pour vous aider
-                        </TooltipContent>
-                      </Tooltip>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Décrivez votre entreprise, son positionnement et sa cible..."
-                        className="min-h-24 resize-y"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    <FormDescription className="text-xs">
-                      Utilisez l'icône ✨ pour générer automatiquement à partir de votre site web
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="objective"
-                rules={{ required: "L'objectif est requis" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      Objectif de l'article
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Quel est le but principal de votre article?
-                        </TooltipContent>
-                      </Tooltip>
-                    </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner un objectif" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {OBJECTIVES.map((objective) => (
-                          <SelectItem key={objective.value} value={objective.value}>
-                            {objective.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              {form.watch("objective") === "other" && (
+              <div className="space-y-6">
                 <FormField
                   control={form.control}
-                  name="otherObjective"
-                  rules={{ required: "Veuillez justifier votre choix d'objectif" }}
+                  name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Précisez votre objectif</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Décrivez l'objectif spécifique de votre article..."
-                          {...field}
-                        />
-                      </FormControl>
+                      <FormLabel>Souhaitez-vous sélectionner une catégorie ?</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Sélectionner une catégorie" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="marketing">Marketing Digital</SelectItem>
+                          <SelectItem value="seo">SEO</SelectItem>
+                          <SelectItem value="content">Content Marketing</SelectItem>
+                          <SelectItem value="social">Réseaux sociaux</SelectItem>
+                          <SelectItem value="tech">Technologie</SelectItem>
+                          <SelectItem value="business">Business & Stratégie</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
               
-              <FormField
-                control={form.control}
-                name="topic"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      Sujet à traiter
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Si vous ne saisissez pas de sujet, notre moteur LÜM sélectionnera automatiquement le sujet SEO le plus pertinent en fonction du contexte de l'entreprise et de la catégorie.
-                        </TooltipContent>
-                      </Tooltip>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Ex: Les 10 meilleures stratégies pour..." 
-                        {...field} 
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="tones"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center mb-1">
-                      <FormLabel className="text-sm font-medium">
-                        Ton souhaité <span className="text-xs text-muted-foreground">(max 2)</span>
-                      </FormLabel>
-                      {USER_PLAN.articlesPerMonth < 12 && (
-                        <span className="text-xs text-amber-600 dark:text-amber-400">
-                          Débloquez avec le pack Avancé (12+ articles/mois)
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      {TONE_OPTIONS.map((tone) => (
-                        <div key={tone.value} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={`tone-${tone.value}`}
-                            disabled={USER_PLAN.articlesPerMonth < 12 || (form.watch("tones").length >= 2 && !form.watch("tones").includes(tone.value))}
-                            className={USER_PLAN.articlesPerMonth < 12 ? "opacity-60" : ""}
-                            checked={form.watch("tones").includes(tone.value)}
-                            onCheckedChange={(checked) => {
-                              const currentTones = form.getValues("tones");
-                              if (checked) {
-                                if (currentTones.length < 2) {
-                                  form.setValue("tones", [...currentTones, tone.value]);
-                                }
-                              } else {
-                                form.setValue("tones", currentTones.filter(t => t !== tone.value));
-                              }
-                            }}
-                          />
-                          <label 
-                            htmlFor={`tone-${tone.value}`}
-                            className={`text-sm ${USER_PLAN.articlesPerMonth < 12 ? "text-muted-foreground" : ""}`}
-                          >
-                            {tone.label}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="contentType"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center mb-1">
-                      <FormLabel>Type de contenu souhaité</FormLabel>
-                      {USER_PLAN.articlesPerMonth < 16 && (
-                        <span className="text-xs text-amber-600 dark:text-amber-400">
-                          Débloquez avec le pack Expert (16+ articles/mois)
-                        </span>
-                      )}
-                    </div>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex flex-wrap gap-4"
-                        disabled={USER_PLAN.articlesPerMonth < 16}
-                      >
-                        {CONTENT_TYPES.map((type) => (
-                          <div key={type.value} className={`flex items-center space-x-2 ${type.value === 'in_depth' ? 'order-first' : ''}`}>
-                            <RadioGroupItem 
-                              value={type.value} 
-                              id={`content-type-${type.value}`}
-                              className={USER_PLAN.articlesPerMonth < 16 ? "opacity-60" : ""}
-                              disabled={USER_PLAN.articlesPerMonth < 16}
-                            />
-                            <label 
-                              htmlFor={`content-type-${type.value}`}
-                              className={`text-sm ${USER_PLAN.articlesPerMonth < 16 ? "text-muted-foreground" : ""} ${type.value === 'in_depth' ? 'font-medium' : ''}`}
+                <FormField
+                  control={form.control}
+                  name="companyContext"
+                  rules={{ required: "Le contexte de l'entreprise est requis" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        Contexte de l'entreprise <span className="text-[#B91226]">*</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              size="icon"
+                              variant="ghost"
+                              className="h-5 w-5 rounded-full p-0"
+                              type="button"
+                              onClick={() => generating !== "companyContext" && generateWithAI("companyContext")}
+                              disabled={generating === "companyContext" || (!form.getValues("website") && !form.getValues("company"))}
                             >
-                              {type.label}
-                            </label>
-                          </div>
-                        ))}
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="authority"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Autorité du blog/site</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex flex-wrap gap-4"
-                      >
-                        {AUTHORITY_LEVELS.map((level) => (
-                          <div key={level.value} className="flex items-center space-x-2">
-                            <RadioGroupItem value={level.value} id={`authority-${level.value}`} />
-                            <label htmlFor={`authority-${level.value}`} className="text-sm">
-                              {level.label}
-                            </label>
-                          </div>
-                        ))}
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="internalLinks"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="block mb-1">Liens internes à inclure (si possible et pertinent)</FormLabel>
-                    <div className="flex flex-col gap-2">
-                      <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
-                        <Input
-                          placeholder="Texte d'ancrage"
-                          className="md:col-span-2"
-                          value={newLink.title}
-                          onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
-                        />
-                        <Input
-                          placeholder="URL du lien"
-                          className="md:col-span-2"
-                          value={newLink.url}
-                          onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
-                        />
-                        <Button 
-                          type="button"
-                          onClick={addInternalLink}
-                          disabled={!newLink.title || !newLink.url}
-                          className="w-full md:w-auto btn-hover-animation"
-                          variant="outline"
-                        >
-                          <Plus className="h-4 w-4 mr-1" /> Ajouter
-                        </Button>
-                      </div>
-
-                      {internalLinks.length > 0 && (
-                        <div className="mt-2 border rounded-md p-2 dark:border-zinc-800 space-y-2">
-                          {internalLinks.map((link, index) => (
-                            <div key={index} className="flex items-center justify-between text-sm p-1.5 bg-zinc-50 dark:bg-zinc-900 rounded">
-                              <div className="truncate flex-1 mr-2">
-                                <span className="font-medium">{link.title}</span>
-                                <span className="mx-1">→</span>
-                                <span className="text-muted-foreground text-xs truncate">{link.url}</span>
-                              </div>
-                              <Button 
-                                size="icon" 
-                                variant="ghost" 
-                                type="button" 
-                                className="h-6 w-6" 
-                                onClick={() => removeInternalLink(index)}
-                              >
-                                <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="bannedTopics"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Sujets à bannir</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Liste des sujets à ne pas aborder dans l'article..."
-                        className="resize-y"
-                        {...field} 
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="useEmojis"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      Émojis dans les sous-titres ?
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Améliore l'UX sur les articles pédagogiques, à éviter pour les sujets juridiques, administratifs...
-                        </TooltipContent>
-                      </Tooltip>
-                    </FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex gap-4"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="yes" id="emojis-yes" />
-                          <label htmlFor="emojis-yes" className="text-sm">Oui</label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="no" id="emojis-no" />
-                          <label htmlFor="emojis-no" className="text-sm">Non</label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="useHtml"
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <div className="flex items-center space-x-2">
+                              {generating === "companyContext" ? (
+                                <div className="h-4 w-4 rounded-full border-2 border-t-transparent border-[#0061E0] animate-spin" />
+                              ) : (
+                                <Star className="h-4 w-4 text-[#0061E0]" />
+                              )}
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">
+                            Utilisez l'icône ✨ pour insérer un modèle pour vous aider
+                          </TooltipContent>
+                        </Tooltip>
+                      </FormLabel>
                       <FormControl>
-                        <Checkbox 
-                          checked={field.value} 
-                          onCheckedChange={field.onChange} 
-                          id="use-html"
+                        <Textarea 
+                          placeholder="Décrivez votre entreprise, son positionnement et sa cible..."
+                          className="min-h-24 resize-y"
+                          {...field} 
                         />
                       </FormControl>
-                      <label htmlFor="use-html" className="text-sm font-medium">
-                        Voulez-vous l'HTML ?
-                      </label>
-                    </div>
-                    
-                    {field.value && (
-                      <FormField
-                        control={form.control}
-                        name="htmlType"
-                        render={({ field }) => (
-                          <FormItem className="ml-6 mt-2">
-                            <FormControl>
-                              <RadioGroup
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                className="flex flex-col space-y-1"
-                              >
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="embed" id="html-embed" />
-                                  <label htmlFor="html-embed" className="text-sm">HTML embed</label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="complete" id="html-complete" />
-                                  <label htmlFor="html-complete" className="text-sm">HTML complet</label>
-                                </div>
-                              </RadioGroup>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <FormMessage />
+                      <FormDescription className="text-xs">
+                        Utilisez l'icône ✨ pour générer automatiquement à partir de votre site web
+                      </FormDescription>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="objective"
+                  rules={{ required: "L'objectif est requis" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        Objectif de l'article
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Quel est le but principal de votre article?
+                          </TooltipContent>
+                        </Tooltip>
+                      </FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Sélectionner un objectif" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {OBJECTIVES.map((objective) => (
+                            <SelectItem key={objective.value} value={objective.value}>
+                              {objective.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              
+                {form.watch("objective") === "other" && (
+                  <FormField
+                    control={form.control}
+                    name="otherObjective"
+                    rules={{ required: "Veuillez justifier votre choix d'objectif" }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Précisez votre objectif</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Décrivez l'objectif spécifique de votre article..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
                     )}
-                  </FormItem>
+                  />
                 )}
-              />
+              
+                <FormField
+                  control={form.control}
+                  name="topic"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        Sujet à traiter
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Si vous ne saisissez pas de sujet, notre moteur LÜM sélectionnera automatiquement le sujet SEO le plus pertinent en fonction du contexte de l'entreprise et de la catégorie.
+                          </TooltipContent>
+                        </Tooltip>
+                      </FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="Ex: Les 10 meilleures stratégies pour..." 
+                          {...field} 
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="tones"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center mb-1">
+                        <FormLabel className="text-sm font-medium">
+                          Ton souhaité <span className="text-xs text-muted-foreground">(max 2)</span>
+                        </FormLabel>
+                        {USER_PLAN.articlesPerMonth < 12 && (
+                          <span className="text-xs text-amber-600 dark:text-amber-400">
+                            Débloquez avec le pack Avancé (12+ articles/mois)
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {TONE_OPTIONS.map((tone) => (
+                          <div key={tone.value} className="flex items-center space-x-2">
+                            <Checkbox 
+                              id={`tone-${tone.value}`}
+                              disabled={USER_PLAN.articlesPerMonth < 12 || (form.watch("tones").length >= 2 && !form.watch("tones").includes(tone.value))}
+                              className={USER_PLAN.articlesPerMonth < 12 ? "opacity-60" : ""}
+                              checked={form.watch("tones").includes(tone.value)}
+                              onCheckedChange={(checked) => {
+                                const currentTones = form.getValues("tones");
+                                if (checked) {
+                                  if (currentTones.length < 2) {
+                                    form.setValue("tones", [...currentTones, tone.value]);
+                                  }
+                                } else {
+                                  form.setValue("tones", currentTones.filter(t => t !== tone.value));
+                                }
+                              }}
+                            />
+                            <label 
+                              htmlFor={`tone-${tone.value}`}
+                              className={`text-sm ${USER_PLAN.articlesPerMonth < 12 ? "text-muted-foreground" : ""}`}
+                            >
+                              {tone.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="contentType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center mb-1">
+                        <FormLabel>Type de contenu souhaité</FormLabel>
+                        {USER_PLAN.articlesPerMonth < 16 && (
+                          <span className="text-xs text-amber-600 dark:text-amber-400">
+                            Débloquez avec le pack Expert (16+ articles/mois)
+                          </span>
+                        )}
+                      </div>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-wrap gap-4"
+                          disabled={USER_PLAN.articlesPerMonth < 16}
+                        >
+                          {CONTENT_TYPES.map((type) => (
+                            <div key={type.value} className={`flex items-center space-x-2 ${type.value === 'in_depth' ? 'order-first' : ''}`}>
+                              <RadioGroupItem 
+                                value={type.value} 
+                                id={`content-type-${type.value}`}
+                                className={USER_PLAN.articlesPerMonth < 16 ? "opacity-60" : ""}
+                                disabled={USER_PLAN.articlesPerMonth < 16}
+                              />
+                              <label 
+                                htmlFor={`content-type-${type.value}`}
+                                className={`text-sm ${USER_PLAN.articlesPerMonth < 16 ? "text-muted-foreground" : ""} ${type.value === 'in_depth' ? 'font-medium' : ''}`}
+                              >
+                                {type.label}
+                              </label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="authority"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Autorité du blog/site</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-wrap gap-4"
+                        >
+                          {AUTHORITY_LEVELS.map((level) => (
+                            <div key={level.value} className="flex items-center space-x-2">
+                              <RadioGroupItem value={level.value} id={`authority-${level.value}`} />
+                              <label htmlFor={`authority-${level.value}`} className="text-sm">
+                                {level.label}
+                              </label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="internalLinks"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="block mb-1">Liens internes à inclure (si possible et pertinent)</FormLabel>
+                      <div className="flex flex-col gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+                          <Input
+                            placeholder="Texte d'ancrage"
+                            className="md:col-span-2"
+                            value={newLink.title}
+                            onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
+                          />
+                          <Input
+                            placeholder="URL du lien"
+                            className="md:col-span-2"
+                            value={newLink.url}
+                            onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+                          />
+                          <Button 
+                            type="button"
+                            onClick={addInternalLink}
+                            disabled={!newLink.title || !newLink.url}
+                            className="w-full md:w-auto btn-hover-animation"
+                            variant="outline"
+                          >
+                            <Plus className="h-4 w-4 mr-1" /> Ajouter
+                          </Button>
+                        </div>
+
+                        {internalLinks.length > 0 && (
+                          <div className="mt-2 border rounded-md p-2 dark:border-zinc-800 space-y-2">
+                            {internalLinks.map((link, index) => (
+                              <div key={index} className="flex items-center justify-between text-sm p-1.5 bg-zinc-50 dark:bg-zinc-900 rounded">
+                                <div className="truncate flex-1 mr-2">
+                                  <span className="font-medium">{link.title}</span>
+                                  <span className="mx-1">→</span>
+                                  <span className="text-muted-foreground text-xs truncate">{link.url}</span>
+                                </div>
+                                <Button 
+                                  size="icon" 
+                                  variant="ghost" 
+                                  type="button" 
+                                  className="h-6 w-6" 
+                                  onClick={() => removeInternalLink(index)}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="bannedTopics"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sujets à bannir</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Liste des sujets à ne pas aborder dans l'article..."
+                          className="resize-y"
+                          {...field} 
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="useEmojis"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        Émojis dans les sous-titres ?
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Améliore l'UX sur les articles pédagogiques, à éviter pour les sujets juridiques, administratifs...
+                          </TooltipContent>
+                        </Tooltip>
+                      </FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex gap-4"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="yes" id="emojis-yes" />
+                            <label htmlFor="emojis-yes" className="text-sm">Oui</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="no" id="emojis-no" />
+                            <label htmlFor="emojis-no" className="text-sm">Non</label>
+                          </div>
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              
+                <FormField
+                  control={form.control}
+                  name="useHtml"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox 
+                            checked={field.value} 
+                            onCheckedChange={field.onChange} 
+                            id="use-html"
+                          />
+                        </FormControl>
+                        <label htmlFor="use-html" className="text-sm font-medium">
+                          Voulez-vous l'HTML ?
+                        </label>
+                      </div>
+                      
+                      {field.value && (
+                        <FormField
+                          control={form.control}
+                          name="htmlType"
+                          render={({ field }) => (
+                            <FormItem className="ml-6 mt-2">
+                              <FormControl>
+                                <RadioGroup
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                  className="flex flex-col space-y-1"
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="embed" id="html-embed" />
+                                    <label htmlFor="html-embed" className="text-sm">HTML embed</label>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="complete" id="html-complete" />
+                                    <label htmlFor="html-complete" className="text-sm">HTML complet</label>
+                                  </div>
+                                </RadioGroup>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             
             <div className="pt-2 border-t dark:border-zinc-800">

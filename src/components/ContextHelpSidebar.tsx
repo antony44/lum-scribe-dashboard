@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Link } from "react-router-dom";
 
 export default function ContextHelpSidebar({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -44,23 +45,28 @@ export default function ContextHelpSidebar({ className = "" }: { className?: str
               <div className="space-y-2">
                 <h4 className="font-medium mb-1 text-sm">Ressources SEO</h4>
                 <div className="flex flex-col gap-1.5">
-                  <a href="#" className="text-[#0061E0] hover:underline text-xs">Guide : Structure optimale d'un article</a>
-                  <a href="#" className="text-[#0061E0] hover:underline text-xs">Les meilleures pratiques SEO 2024</a>
-                  <a href="#" className="text-[#0061E0] hover:underline text-xs">Optimiser vos mots-clés</a>
+                  <Link to="/resources" className="text-[#0061E0] hover:underline text-xs">Guide : Structure optimale d'un article</Link>
+                  <Link to="/resources" className="text-[#0061E0] hover:underline text-xs">Les meilleures pratiques SEO 2024</Link>
+                  <Link to="/resources" className="text-[#0061E0] hover:underline text-xs">Optimiser vos mots-clés</Link>
                 </div>
               </div>
 
               <div className="pt-2 border-t border-zinc-200 dark:border-zinc-700">
                 <h4 className="font-medium mb-1 text-sm">FAQ</h4>
                 <div className="flex flex-col gap-1.5 text-xs">
-                  <a href="#" className="text-[#0061E0] hover:underline">Pourquoi certaines options sont grisées ?</a>
-                  <a href="#" className="text-[#0061E0] hover:underline">Comment fonctionne la génération IA ?</a>
-                  <a href="#" className="text-[#0061E0] hover:underline">Combien de temps pour recevoir mon article ?</a>
+                  <Link to="/faq" className="text-[#0061E0] hover:underline">Pourquoi certaines options sont grisées ?</Link>
+                  <Link to="/faq" className="text-[#0061E0] hover:underline">Comment fonctionne la génération IA ?</Link>
+                  <Link to="/faq" className="text-[#0061E0] hover:underline">Combien de temps pour recevoir mon article ?</Link>
                 </div>
               </div>
 
-              <Button variant="outline" size="sm" className="w-full text-[#0061E0] border-[#0061E0]/20 hover:bg-[#0061E0]/10">
-                Contacter le support
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full text-[#0061E0] border-[#0061E0]/20 hover:bg-[#0061E0]/10"
+                asChild
+              >
+                <Link to="/support">Contacter le support</Link>
               </Button>
             </div>
           </CardContent>

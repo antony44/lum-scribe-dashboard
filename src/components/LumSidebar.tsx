@@ -13,7 +13,8 @@ import {
   FileText as FileDocument,
   X,
   Check,
-  LifeBuoy
+  LifeBuoy,
+  BookOpen
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
@@ -28,6 +29,7 @@ const navItems = [
   { label: "Mon Compte", path: "/account", icon: User },
   { label: "Factures", path: "/invoices", icon: FileDocument },
   { label: "FAQ", path: "/faq", icon: HelpCircle },
+  { label: "Ressources", path: "/resources", icon: BookOpen },
   { label: "Support", path: "/support", icon: LifeBuoy },
 ];
 
@@ -98,10 +100,10 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
       {/* Sidebar */}
       <aside 
         className={`fixed inset-y-0 left-0 w-64 bg-sidebar dark:bg-sidebar text-sidebar-foreground dark:text-sidebar-foreground transition-transform duration-300 ease-in-out z-40
-          ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+          ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 overflow-hidden`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo Section - Fixed to show only one LÜM logo */}
+          {/* Logo Section */}
           <div className="p-4 flex items-center justify-center">
             <span className="font-black text-xl tracking-tighter">LÜM</span>
           </div>
@@ -180,7 +182,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto no-scrollbar">
             {navItems.map((item) => (
               <NavLink
                 key={item.path + item.label}
@@ -214,9 +216,9 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           </div>
 
           {/* Footer/Version */}
-          <div className="p-4 text-center text-xs text-sidebar-foreground/50">
-            <p>LÜM v1.0.0</p>
-            <p className="mt-1">© 2025 LÜM. Tous droits réservés.</p>
+          <div className="p-4 text-center border-t border-sidebar-border">
+            <p className="text-[10px] text-sidebar-foreground/50">LÜM v1.0.0</p>
+            <p className="text-[10px] text-sidebar-foreground/50 mt-0.5">© 2025 LÜM. Tous droits réservés.</p>
           </div>
         </div>
       </aside>

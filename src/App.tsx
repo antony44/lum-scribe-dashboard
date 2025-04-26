@@ -14,6 +14,7 @@ import Referral from "./pages/Referral";
 import Account from "./pages/Account";
 import Support from "./pages/Support";
 import FAQ from "./pages/FAQ";
+import Resources from "./pages/Resources";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import OrdersHistoryPage from "./pages/OrdersHistory";
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/account" element={<Account />} />
               <Route path="/support" element={<Support />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/resources" element={<Resources />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/orders-history" element={<OrdersHistoryPage />} />
               <Route path="*" element={<NotFound />} />

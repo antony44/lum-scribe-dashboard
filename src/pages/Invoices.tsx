@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { toast } from "@/components/ui/sonner";
 import TopBar from "@/components/TopBar";
-import DarkSidebarLUM from "@/components/DarkSidebarLUM";
+import LumSidebar from "@/components/LumSidebar";
 import { Shield, Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -95,7 +94,7 @@ const Invoices = () => {
 
   return (
     <div className="flex min-h-screen">
-      <DarkSidebarLUM activeSection="Factures" />
+      <LumSidebar activeSection="Factures" />
       <div className="flex-1">
         <TopBar />
         

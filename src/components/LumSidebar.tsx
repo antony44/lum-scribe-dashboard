@@ -10,7 +10,7 @@ import {
   Moon,
   Sun,
   Bell,
-  FileText2
+  FileText as FileDocument
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
@@ -21,7 +21,7 @@ const navItems = [
   { label: "Faire mon Article", path: "/order", icon: FileText },
   { label: "Analytics", path: "/analytics", icon: ChartBar },
   { label: "Mon Compte", path: "/account", icon: User },
-  { label: "Factures", path: "/invoices", icon: FileText2 },
+  { label: "Factures", path: "/invoices", icon: FileDocument },
   { label: "FAQ", path: "/support", icon: HelpCircle },
   { label: "Support", path: "/support", icon: HelpCircle },
 ];

@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import DarkSidebarLUM from "@/components/DarkSidebarLUM";
+import LumSidebar from "@/components/LumSidebar";
 import OrdersHistoryHeader from "@/components/OrdersHistoryHeader";
 import OrdersHistoryFilters from "@/components/OrdersHistoryFilters";
 import OrdersHistoryTable from "@/components/OrdersHistoryTable";
@@ -12,7 +11,7 @@ const OrdersHistoryPage = () => {
 
   return (
     <div className="flex min-h-screen bg-[#F6F8FA] font-inter">
-      <DarkSidebarLUM activeSection="Commandes" />
+      <LumSidebar activeSection="Commandes" />
       <div className="flex-1 flex flex-col">
         <OrdersHistoryHeader />
         <main className="flex-1 flex flex-row w-full px-0 md:px-8 py-4">

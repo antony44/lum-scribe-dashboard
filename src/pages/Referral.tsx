@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import DarkSidebarLUM from "@/components/DarkSidebarLUM";
+import LumSidebar from "@/components/LumSidebar";
 import TopBar from "@/components/TopBar";
 import ReferralHero from "@/components/referral/ReferralHero";
 import ReferralCode from "@/components/referral/ReferralCode";
@@ -26,21 +25,19 @@ const Referral = () => {
       title: "Code promo créé avec succès !",
       description: "Votre nouveau code promo est maintenant actif.",
     });
-    // Briefly show confetti animation
     setShowConfetti(true);
     setTimeout(() => setShowConfetti(false), 3000);
   };
 
   return (
     <div className="flex min-h-screen bg-[#F6F8FA] font-inter">
-      <DarkSidebarLUM activeSection="Referral Program" />
+      <LumSidebar activeSection="Referral Program" />
       <div className="flex-1 flex flex-col">
         <TopBar />
         <main className="flex-1 flex flex-row w-full px-4 md:px-8 py-4">
           <div className="flex-1 flex flex-col max-w-5xl">
             <h1 className="text-2xl md:text-3xl font-bold mb-4">Parrainage & Codes promo</h1>
             
-            {/* Referral Section */}
             <section className="mb-8 animate-fade-in">
               <ReferralHero />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
@@ -54,12 +51,10 @@ const Referral = () => {
               <ReferralHistory />
             </section>
 
-            {/* Promo Codes Section */}
             <section className="mb-8 animate-fade-in">
               <PromoCodeSection onPromoCreated={handlePromoCreated} />
             </section>
 
-            {/* Confetti overlay (conditionally shown) */}
             {showConfetti && (
               <div className="fixed inset-0 pointer-events-none z-50" id="confetti-container"></div>
             )}

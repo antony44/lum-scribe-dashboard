@@ -42,7 +42,7 @@ export default function Index() {
               <StatCard value={QUOTA_POURCENT + " %"} label="% du quota utilisé" tooltip="Pourcentage d'utilisation de votre quota mensuel." />
               <StatCard value={PERF + " %"} label="Performance éditoriale" badge="Excellente" tooltip="La qualité des articles selon l'équipe éditoriale." />
             </div>
-            <Button onClick={handleOrder} disabled={loading} variant="default" className="w-full lg:w-auto mt-4 text-base py-3 bg-[#b91226] text-[#2b395b]">
+            <Button onClick={handleOrder} disabled={loading} variant="default" className="w-full lg:w-auto mt-4 text-base py-3 bg-[#0061e0] text-slate-50">
               {loading ? <span className="flex items-center gap-2">
                   <span className="animate-spin rounded-full border-2 border-primary border-r-transparent h-4 w-4 inline-block" /> 
                   Chargement...

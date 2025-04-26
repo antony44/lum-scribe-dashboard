@@ -304,7 +304,6 @@ export default function OrderForm() {
                 <FormField
                   control={form.control}
                   name="companyContext"
-                  rules={{ required: "Le contexte de l'entreprise est requis" }}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-1">

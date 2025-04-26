@@ -26,9 +26,9 @@ const App = () => (
       <BrowserRouter>
         <Toaster />
         <Sonner />
-        <div className="flex min-h-screen w-full bg-background dark:bg-gray-900">
+        <div className="flex min-h-screen w-full bg-background dark:bg-background">
           <LumSidebar />
-          <main className="flex-1 ml-0 md:ml-64 min-h-screen p-6">
+          <main className="flex-1 ml-0 md:ml-64 min-h-screen p-6 bg-background dark:bg-background">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/order" element={<Order />} />

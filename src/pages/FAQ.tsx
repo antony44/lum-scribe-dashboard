@@ -34,13 +34,13 @@ const FAQ = () => {
       
       <Card className="bg-card">
         <CardHeader>
-          <CardTitle>Questions fréquentes</CardTitle>
+          <CardTitle className="text-card-foreground">Questions fréquentes</CardTitle>
         </CardHeader>
         <CardContent>
           <Accordion type="single" collapsible className="w-full">
             {faqItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-foreground">{item.question}</AccordionTrigger>
+              <AccordionItem key={index} value={`item-${index}`} className="border-border">
+                <AccordionTrigger className="text-card-foreground">{item.question}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   {item.answer}
                 </AccordionContent>

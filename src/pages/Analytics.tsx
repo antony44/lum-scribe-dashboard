@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
@@ -61,14 +62,14 @@ const Analytics = () => {
   return (
     <div className="animate-fade-in">
       <div className="flex flex-wrap justify-between items-center mb-6">
-        <h1 className="text-3xl md:text-4xl font-bold">Analytics</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground">Analytics</h1>
         <Button 
           onClick={handleExport} 
-          className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-200"
+          className="bg-card hover:bg-muted text-foreground border border-border"
           disabled={loading}
         >
           {loading ? (
-            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2"></div>
           ) : (
             <Download className="w-4 h-4 mr-2" />
           )}
@@ -91,14 +92,14 @@ const Analytics = () => {
           tooltip="Commandes du mois en cours"
         />
         
-        <Card className="bg-white rounded-xl border shadow-sm">
+        <Card className="bg-card text-card-foreground rounded-xl border shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-medium">
+            <CardTitle className="text-lg font-medium text-card-foreground">
               Meilleur moment pour commander
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700">
+            <p className="text-foreground">
               Vous recevez plus de vues le mardi à 9 h
             </p>
           </CardContent>
@@ -107,9 +108,9 @@ const Analytics = () => {
 
       {/* Monthly Orders Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card className="bg-white rounded-xl border shadow-sm">
+        <Card className="bg-card text-card-foreground rounded-xl border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-lg font-medium">
+            <CardTitle className="text-lg font-medium text-card-foreground">
               Commandes mensuelles
             </CardTitle>
           </CardHeader>
@@ -130,13 +131,13 @@ const Analytics = () => {
                       <stop offset="95%" stopColor="#0061E0" stopOpacity={0.1}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="name" stroke="#888" fontSize={12} />
-                  <YAxis stroke="#888" fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(140, 140, 140, 0.2)" />
+                  <XAxis dataKey="name" stroke="currentColor" fontSize={12} />
+                  <YAxis stroke="currentColor" fontSize={12} />
                   <RechartsTooltip 
                     contentStyle={{
-                      backgroundColor: "#fff",
-                      border: "1px solid #e2e8f0",
+                      backgroundColor: "var(--card)",
+                      border: "1px solid var(--border)",
                       borderRadius: "0.375rem",
                       padding: "0.5rem",
                       boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"

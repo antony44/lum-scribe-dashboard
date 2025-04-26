@@ -60,7 +60,6 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
-    // Ici, on pourrait ajouter la logique réelle pour basculer le mode sombre
     if (!darkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -81,7 +80,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
       {/* Mobile Toggle Button */}
       <button
         onClick={toggleMobileSidebar}
-        className="fixed top-4 left-4 z-50 p-2 rounded-md bg-white dark:bg-gray-800 shadow-lg md:hidden"
+        className="fixed top-4 left-4 z-50 p-2 rounded-md bg-card dark:bg-card shadow-lg md:hidden"
         aria-label="Toggle Menu"
       >
         <svg 
@@ -98,33 +97,33 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed inset-y-0 left-0 w-64 bg-[#121C2D] text-white transition-transform duration-300 ease-in-out z-40
+        className={`fixed inset-y-0 left-0 w-64 bg-sidebar dark:bg-sidebar text-sidebar-foreground dark:text-sidebar-foreground transition-transform duration-300 ease-in-out z-40
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo Section - Fixed to only show one LÜM logo */}
+          {/* Logo Section - Fixed to show only one LÜM logo */}
           <div className="p-4 flex items-center">
             <span className="font-black text-xl tracking-tighter">LÜM</span>
           </div>
 
           {/* User Profile Section */}
-          <div className="px-4 py-3 flex items-center space-x-3 border-b border-white/10">
-            <Avatar className="h-12 w-12 border-2 border-white/20">
+          <div className="px-4 py-3 flex items-center space-x-3 border-b border-sidebar-border">
+            <Avatar className="h-12 w-12 border-2 border-sidebar-border">
               <AvatarImage src="/avatar.jpg" alt="User" />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div>
               <p className="font-medium">John Doe</p>
-              <p className="text-sm text-white/70">Premium</p>
+              <p className="text-sm opacity-70">Premium</p>
             </div>
           </div>
 
           {/* Notifications Section */}
-          <div className="px-4 py-3 border-b border-white/10">
+          <div className="px-4 py-3 border-b border-sidebar-border">
             <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
               <PopoverTrigger asChild>
                 <button 
-                  className="w-full flex items-center px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10"
+                  className="w-full flex items-center px-2 py-2 rounded-lg transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                   <Bell className="w-5 h-5 mr-3" />
                   <span>Notifications</span>
@@ -136,12 +135,12 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                 </button>
               </PopoverTrigger>
               <PopoverContent 
-                className="w-80 p-0 bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700"
+                className="w-80 p-0 bg-card dark:bg-card shadow-lg rounded-lg border border-border"
                 align="start" 
                 sideOffset={5}
               >
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="font-semibold">Notifications</h3>
+                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                  <h3 className="font-semibold text-foreground">Notifications</h3>
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -155,23 +154,23 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                 </div>
                 <div className="max-h-80 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+                    <div className="py-8 text-center text-muted-foreground">
                       <p>Aucune notification</p>
                     </div>
                   ) : (
                     notifications.map((notification) => (
                       <div 
                         key={notification.id}
-                        className={`px-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer ${notification.read ? '' : 'bg-blue-50 dark:bg-blue-900/10'}`}
+                        className={`px-4 py-3 border-b border-border last:border-0 hover:bg-muted cursor-pointer ${notification.read ? '' : 'bg-blue-50 dark:bg-blue-900/10'}`}
                       >
                         <div className="flex justify-between items-start">
-                          <h4 className="font-medium text-sm">{notification.title}</h4>
+                          <h4 className="font-medium text-sm text-foreground">{notification.title}</h4>
                           {!notification.read && (
                             <span className="h-2 w-2 rounded-full bg-blue-500"></span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{notification.description}</p>
-                        <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{notification.description}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
                       </div>
                     ))
                   )}
@@ -189,8 +188,8 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                 className={({ isActive }) =>
                   `flex items-center px-4 py-2.5 rounded-lg transition-all duration-200
                   ${isActive || activeSection === item.label
-                    ? 'bg-[#0061E0] font-semibold' 
-                    : 'hover:bg-white/10'}`
+                    ? 'bg-sidebar-primary text-sidebar-primary-foreground font-semibold' 
+                    : 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`
                 }
                 end={item.path === "/"}
               >
@@ -201,9 +200,9 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           </nav>
 
           {/* Dark Mode Toggle */}
-          <div className="p-4 border-t border-white/10">
+          <div className="p-4 border-t border-sidebar-border">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 text-sidebar-foreground">
                 {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
                 <span className="text-sm">Mode sombre</span>
               </div>
@@ -215,7 +214,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           </div>
 
           {/* Footer/Version - Updated year to 2025 */}
-          <div className="p-4 text-center text-xs text-white/50">
+          <div className="p-4 text-center text-xs text-sidebar-foreground/50">
             <p>LÜM v1.0.0</p>
             <p className="mt-1">© 2025 LÜM. Tous droits réservés.</p>
           </div>

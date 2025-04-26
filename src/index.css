@@ -128,4 +128,37 @@
   .dark-button {
     @apply dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80;
   }
+  
+  /* Additional premium dark mode styles to fix remaining white/light components */
+  .dark .dark-mode-card {
+    @apply bg-[#161C24] border-[#202837]/50;
+  }
+  
+  .dark .dark-mode-elevated {
+    @apply bg-[#202837] border-[#202837]/70;
+  }
+  
+  .dark .dark-mode-input {
+    @apply bg-[#161C24] border-[#202837] text-white;
+  }
+  
+  .dark .dark-mode-hover:hover {
+    @apply bg-[#202837];
+  }
+  
+  .dark .dark-mode-accent {
+    @apply text-[#0061E0];
+  }
+  
+  .dark .dark-mode-container {
+    @apply bg-[#161C24];
+  }
+  
+  .dark .dark-mode-text {
+    @apply text-gray-200;
+  }
+  
+  .dark .dark-mode-muted {
+    @apply text-gray-400;
+  }
 }

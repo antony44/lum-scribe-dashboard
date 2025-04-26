@@ -65,7 +65,7 @@ const Analytics = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-foreground">Analytics</h1>
         <Button 
           onClick={handleExport} 
-          className="bg-secondary hover:bg-muted text-secondary-foreground border border-border dark:bg-secondary dark:text-secondary-foreground"
+          className="dark:border-[#202837] dark:bg-[#161C24] dark:text-white dark:hover:bg-[#202837]"
           disabled={loading}
         >
           {loading ? (
@@ -92,7 +92,7 @@ const Analytics = () => {
           tooltip="Commandes du mois en cours"
         />
         
-        <Card className="bg-card text-card-foreground rounded-xl border border-border shadow-sm dark:border-border">
+        <Card className="dark-mode-card border-border">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg font-medium text-card-foreground">
               Meilleur moment pour commander
@@ -108,7 +108,7 @@ const Analytics = () => {
 
       {/* Monthly Orders Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card className="bg-card text-card-foreground rounded-xl border border-border shadow-sm dark:border-border">
+        <Card className="dark-mode-card border-border">
           <CardHeader>
             <CardTitle className="text-lg font-medium text-card-foreground">
               Commandes mensuelles
@@ -167,7 +167,25 @@ const Analytics = () => {
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <BestArticles articles={bestArticles} />
+        <Card className="dark-mode-card border-border">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Articles les plus performants
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-4">
+              {bestArticles.map((article) => (
+                <li key={article.id} className="flex items-start">
+                  <span className="text-lg font-bold text-blue-600 dark:text-blue-400 mr-2">
+                    {article.id}
+                  </span>
+                  <span className="font-medium text-foreground">{article.title}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
         <AIRecommendations />
       </div>
     </div>

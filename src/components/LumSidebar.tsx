@@ -135,7 +135,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                 </button>
               </PopoverTrigger>
               <PopoverContent 
-                className="w-80 p-0 bg-card dark:bg-card shadow-lg rounded-lg border border-border"
+                className="w-80 p-0 dark-mode-card shadow-lg rounded-lg border border-border"
                 align="start" 
                 sideOffset={5}
               >
@@ -145,7 +145,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                     variant="ghost" 
                     size="sm" 
                     onClick={markAllAsRead}
-                    className="h-8 text-xs dark:text-foreground dark:hover:bg-secondary dark:hover:text-foreground"
+                    className="h-8 text-xs dark:text-foreground dark:hover:bg-[#202837]"
                     disabled={unreadNotifications === 0}
                   >
                     <Check className="w-4 h-4 mr-1" />

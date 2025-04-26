@@ -218,7 +218,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           {/* Footer/Version */}
           <div className="p-4 text-center text-xs text-white/50">
             <p>LÜM v1.0.0</p>
-            <p className="mt-1">© 2023 LÜM. Tous droits réservés.</p>
+            <p className="mt-1">© 2025 LÜM. Tous droits réservés.</p>
           </div>
         </div>
       </aside>

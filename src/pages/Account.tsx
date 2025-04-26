@@ -16,7 +16,7 @@ import AccountActionsCard from "@/components/account/AccountActionsCard";
 
 const Account = () => {
   return (
-    <div className="container mx-auto py-6">
+    <div className="py-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">Mon compte</h1>
         <p className="text-muted-foreground">Gérez vos informations personnelles et vos préférences.</p>
@@ -45,7 +45,7 @@ const Account = () => {
       </div>
       
       <div className="mt-10 text-center">
-        <a href="#" className="text-blue-600 hover:underline text-sm">
+        <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline text-sm">
           Contact support / FAQ
         </a>
       </div>

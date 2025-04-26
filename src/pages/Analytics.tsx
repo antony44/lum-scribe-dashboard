@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
@@ -92,7 +91,7 @@ const Analytics = () => {
           tooltip="Commandes du mois en cours"
         />
         
-        <Card className="bg-card text-card-foreground rounded-xl border border-border shadow-sm dark:border-border">
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg font-medium text-card-foreground">
               Meilleur moment pour commander
@@ -108,7 +107,7 @@ const Analytics = () => {
 
       {/* Monthly Orders Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card className="bg-card text-card-foreground rounded-xl border border-border shadow-sm dark:border-border">
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
           <CardHeader>
             <CardTitle className="text-lg font-medium text-card-foreground">
               Commandes mensuelles
@@ -162,13 +161,40 @@ const Analytics = () => {
           </CardContent>
         </Card>
 
-        <ActivityHeatmap />
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Heatmap d'activité
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ActivityHeatmap />
+          </CardContent>
+        </Card>
       </div>
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <BestArticles articles={bestArticles} />
-        <AIRecommendations />
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Articles les plus populaires
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BestArticles articles={bestArticles} />
+          </CardContent>
+        </Card>
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Recommandations d'IA
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AIRecommendations />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

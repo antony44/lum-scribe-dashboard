@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -46,42 +45,42 @@
   }
 
   .dark {
-    --background: 222.2 47.4% 11.2%;
-    --foreground: 210 40% 98%;
-
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 220 20% 11%;
+    --foreground: 0 0% 98%;
     
-    --sidebar-background: 224 71.4% 4.1%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --card: 220 20% 11%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 220 20% 11%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 217 89% 61%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 215 25% 18%;
+    --muted-foreground: 215 20% 70%;
+    
+    --accent: 215 25% 18%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 215 25% 18%;
+    --input: 215 25% 18%;
+    --ring: 224 100% 44%;
+    
+    --sidebar-background: 220 20% 11%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 217 89% 61%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 224.3 76.3% 48%;
+    --sidebar-accent: 215 25% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 215 25% 18%;
+    --sidebar-ring: 217 89% 61%;
   }
 }
 
@@ -129,7 +128,6 @@
     @apply dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80;
   }
   
-  /* Additional premium dark mode styles to fix remaining white/light components */
   .dark .dark-mode-card {
     @apply bg-[#161C24] border-[#202837]/50;
   }
@@ -148,6 +146,10 @@
   
   .dark .dark-mode-accent {
     @apply text-[#0061E0];
+  }
+  
+  .dark .dark-mode-danger {
+    @apply text-[#B91226];
   }
   
   .dark .dark-mode-container {

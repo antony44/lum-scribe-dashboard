@@ -26,7 +26,11 @@ const navItems = [
   { label: "Support", path: "/support", icon: HelpCircle },
 ];
 
-export default function LumSidebar() {
+interface LumSidebarProps {
+  activeSection?: string;
+}
+
+export default function LumSidebar({ activeSection }: LumSidebarProps) {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hasNotifications] = useState(true);
@@ -93,7 +97,7 @@ export default function LumSidebar() {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex items-center px-4 py-2.5 rounded-lg transition-all duration-200
-                  ${isActive 
+                  ${isActive || activeSection === item.label
                     ? 'bg-[#0061E0] font-semibold' 
                     : 'hover:bg-white/10'}`
                 }
@@ -137,4 +141,3 @@ export default function LumSidebar() {
     </>
   );
 }
-

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,7 @@ const Analytics = () => {
 
   const handleExport = () => {
     setLoading(true);
-    // Simulate export
+    // Simuler export
     setTimeout(() => {
       setLoading(false);
       toast.success("Export effectué !");
@@ -65,7 +64,7 @@ const Analytics = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-foreground">Analytics</h1>
         <Button 
           onClick={handleExport} 
-          className="bg-card hover:bg-muted text-foreground border border-border"
+          className="bg-secondary hover:bg-muted text-secondary-foreground border border-border dark:bg-secondary dark:text-secondary-foreground"
           disabled={loading}
         >
           {loading ? (
@@ -92,7 +91,7 @@ const Analytics = () => {
           tooltip="Commandes du mois en cours"
         />
         
-        <Card className="bg-card text-card-foreground rounded-xl border shadow-sm">
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg font-medium text-card-foreground">
               Meilleur moment pour commander
@@ -108,7 +107,7 @@ const Analytics = () => {
 
       {/* Monthly Orders Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card className="bg-card text-card-foreground rounded-xl border shadow-sm">
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
           <CardHeader>
             <CardTitle className="text-lg font-medium text-card-foreground">
               Commandes mensuelles
@@ -140,10 +139,13 @@ const Analytics = () => {
                       border: "1px solid var(--border)",
                       borderRadius: "0.375rem",
                       padding: "0.5rem",
-                      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+                      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                      color: "var(--card-foreground)"
                     }}
                     formatter={(value) => [`${value}`, 'Commandes']}
                     labelFormatter={(label) => `Mois: ${label}`}
+                    itemStyle={{ color: "var(--card-foreground)" }}
+                    labelStyle={{ color: "var(--card-foreground)" }}
                   />
                   <Area 
                     type="monotone" 
@@ -159,13 +161,40 @@ const Analytics = () => {
           </CardContent>
         </Card>
 
-        <ActivityHeatmap />
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Heatmap d'activité
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ActivityHeatmap />
+          </CardContent>
+        </Card>
       </div>
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <BestArticles articles={bestArticles} />
-        <AIRecommendations />
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Articles les plus populaires
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BestArticles articles={bestArticles} />
+          </CardContent>
+        </Card>
+        <Card className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm hover:dark:bg-[#202837] transition-colors">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-card-foreground">
+              Recommandations d'IA
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AIRecommendations />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

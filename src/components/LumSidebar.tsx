@@ -102,7 +102,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
       >
         <div className="flex flex-col h-full">
           {/* Logo Section - Fixed to show only one LÜM logo */}
-          <div className="p-4 flex items-center">
+          <div className="p-4 flex items-center justify-center">
             <span className="font-black text-xl tracking-tighter">LÜM</span>
           </div>
 
@@ -145,7 +145,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                     variant="ghost" 
                     size="sm" 
                     onClick={markAllAsRead}
-                    className="h-8 text-xs"
+                    className="h-8 text-xs dark:text-foreground dark:hover:bg-secondary dark:hover:text-foreground"
                     disabled={unreadNotifications === 0}
                   >
                     <Check className="w-4 h-4 mr-1" />
@@ -213,7 +213,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
             </div>
           </div>
 
-          {/* Footer/Version - Updated year to 2025 */}
+          {/* Footer/Version */}
           <div className="p-4 text-center text-xs text-sidebar-foreground/50">
             <p>LÜM v1.0.0</p>
             <p className="mt-1">© 2025 LÜM. Tous droits réservés.</p>

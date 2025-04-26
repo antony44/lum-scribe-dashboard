@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import StatCard from "@/components/StatCard";
 import QuotaCircle from "@/components/QuotaCircle";
@@ -33,7 +32,7 @@ export default function Index() {
         {/* Left: Welcome + stats + CTA */}
         <div className="flex-1 min-w-0">
           {/* Welcome card */}
-          <div className="bg-card dark:bg-card rounded-xl border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1">
+          <div className="bg-card dark:bg-[#161C24] text-card-foreground rounded-xl border border-border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1 hover:dark:bg-[#202837] transition-colors">
             <div className="text-2xl font-semibold mb-2 flex items-center text-foreground">
               <span className="mr-2 text-2xl">👋</span>
               <span>Bonjour {PRENOM}&nbsp;!</span>
@@ -64,9 +63,8 @@ export default function Index() {
             </div>
             <Button
               onClick={handleOrder}
-              className="w-full lg:w-auto mt-4 text-base py-3"
+              className="w-full lg:w-auto mt-4 text-base py-3 bg-[#0061E0] hover:bg-[#0061E0]/90 dark:text-white"
               disabled={loading}
-              variant="default"
             >
               {loading ? (
                 <span className="flex items-center gap-2">

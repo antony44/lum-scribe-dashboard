@@ -291,22 +291,12 @@ export default function OrderForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Souhaitez-vous sélectionner une catégorie ?</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Sélectionner une catégorie" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="marketing">Marketing Digital</SelectItem>
-                          <SelectItem value="seo">SEO</SelectItem>
-                          <SelectItem value="content">Content Marketing</SelectItem>
-                          <SelectItem value="social">Réseaux sociaux</SelectItem>
-                          <SelectItem value="tech">Technologie</SelectItem>
-                          <SelectItem value="business">Business & Stratégie</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
+                      <FormControl>
+                        <Input 
+                          placeholder="Saisissez votre catégorie personnalisée" 
+                          {...field} 
+                        />
+                      </FormControl>
                     </FormItem>
                   )}
                 />
@@ -318,7 +308,7 @@ export default function OrderForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-1">
-                        Contexte de l'entreprise <span className="text-[#B91226]">*</span>
+                        Contexte de l'entreprise 
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button 
@@ -337,7 +327,7 @@ export default function OrderForm() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            Utilisez l'icône ✨ pour insérer un modèle pour vous aider
+                            Utilisez l'icône ✨ pour générer un modele simple de contexte
                           </TooltipContent>
                         </Tooltip>
                       </FormLabel>
@@ -349,9 +339,6 @@ export default function OrderForm() {
                         />
                       </FormControl>
                       <FormMessage />
-                      <FormDescription className="text-xs">
-                        Utilisez l'icône ✨ pour générer automatiquement à partir de votre site web
-                      </FormDescription>
                     </FormItem>
                   )}
                 />
@@ -363,7 +350,7 @@ export default function OrderForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-1">
-                        Objectif de l'article
+                        Avez vous un objectif précis pour l'article ?
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Info className="h-4 w-4 text-muted-foreground" />

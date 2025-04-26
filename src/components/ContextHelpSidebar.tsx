@@ -2,16 +2,17 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Info } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Link } from "react-router-dom";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function ContextHelpSidebar({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <Card className={`dark:bg-[#202837] border-zinc-200 dark:border-zinc-800 overflow-hidden ${className}`}>
-      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="md:block">
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between">
           <h3 className="text-base font-semibold">Besoin d'aide ?</h3>
           <CollapsibleTrigger asChild className="md:hidden">
@@ -55,7 +56,7 @@ export default function ContextHelpSidebar({ className = "" }: { className?: str
                 <h4 className="font-medium mb-1 text-sm">FAQ</h4>
                 <div className="flex flex-col gap-1.5 text-xs">
                   <Link to="/faq" className="text-[#0061E0] hover:underline">Pourquoi certaines options sont grisées ?</Link>
-                  <Link to="/faq" className="text-[#0061E0] hover:underline">Comment fonctionne la génération IA ?</Link>
+                  <Link to="/faq" className="text-[#0061E0] hover:underline">Comment fonctionne le moteur LÜM ?</Link>
                   <Link to="/faq" className="text-[#0061E0] hover:underline">Combien de temps pour recevoir mon article ?</Link>
                 </div>
               </div>
@@ -63,7 +64,7 @@ export default function ContextHelpSidebar({ className = "" }: { className?: str
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="w-full text-[#0061E0] border-[#0061E0]/20 hover:bg-[#0061E0]/10"
+                className="w-full text-[#0061E0] border-[#0061E0]/20 hover:bg-[#0061E0]/10 btn-hover-animation"
                 asChild
               >
                 <Link to="/support">Contacter le support</Link>

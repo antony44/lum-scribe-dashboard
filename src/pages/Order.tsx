@@ -5,7 +5,7 @@ import ContextHelpSidebar from "@/components/ContextHelpSidebar";
 
 const Order = () => (
   <div className="h-full min-h-screen w-full bg-background dark:bg-[#161C24] font-inter flex flex-col items-stretch">
-    <div className="w-full max-w-4xl mx-auto py-10 px-2 sm:px-8">
+    <div className="w-full max-w-5xl mx-auto py-10 px-2 sm:px-8">
       <h1 className="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-2 text-foreground">
         Créer votre Article
       </h1>

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { 
-  Home,
+  LayoutDashboard,
   FileText,
   ChartBar,
   User,
@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 
 const navItems = [
-  { label: "Accueil", path: "/", icon: Home },
+  { label: "Tableau de Bord", path: "/", icon: LayoutDashboard },
   { label: "Faire mon Article", path: "/order", icon: FileText },
   { label: "Analytics", path: "/analytics", icon: ChartBar },
   { label: "Mon Compte", path: "/account", icon: User },
@@ -37,8 +37,8 @@ const navItems = [
 const notificationsData = [
   { id: 1, read: false, title: "Votre article est prêt", description: "Article sur le marketing digital terminé", time: "Il y a 15 min" },
   { id: 2, read: false, title: "Mise à jour de LÜM", description: "Découvrez les nouvelles fonctionnalités", time: "Il y a 2h" },
-  { id: 3, read: true, title: "Article envoyé", description: "Article sur l'IA expédié avec succès", time: "Il y a 1j" },
-  { id: 4, read: true, title: "GoldAI disponible", description: "Essayez notre nouveau modèle GoldAI", time: "Il y a 3j" }
+  { id: 3, read: true, title: "Article envoyé", description: "Article expédié avec succès", time: "Il y a 1j" },
+  { id: 4, read: true, title: "Nouvelle fonctionnalité", description: "Essayez notre nouveau moteur LÜM", time: "Il y a 3j" }
 ];
 
 interface LumSidebarProps {
@@ -137,7 +137,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                 </button>
               </PopoverTrigger>
               <PopoverContent 
-                className="w-80 p-0 bg-card dark:bg-card shadow-lg rounded-lg border border-border"
+                className="w-80 p-0 bg-card dark:bg-card shadow-lg rounded-lg border border-border no-scrollbar max-h-[400px] overflow-y-auto"
                 align="start" 
                 sideOffset={5}
               >
@@ -154,7 +154,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
                     Tout marquer comme lu
                   </Button>
                 </div>
-                <div className="max-h-80 overflow-y-auto">
+                <div className="overflow-y-auto no-scrollbar">
                   {notifications.length === 0 ? (
                     <div className="py-8 text-center text-muted-foreground">
                       <p>Aucune notification</p>
@@ -216,9 +216,9 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           </div>
 
           {/* Footer/Version */}
-          <div className="p-4 text-center border-t border-sidebar-border">
-            <p className="text-[10px] text-sidebar-foreground/50">LÜM v1.0.0</p>
-            <p className="text-[10px] text-sidebar-foreground/50 mt-0.5">© 2025 LÜM. Tous droits réservés.</p>
+          <div className="p-3 text-center border-t border-sidebar-border">
+            <p className="text-[9px] text-sidebar-foreground/50">LÜM v1.0.0</p>
+            <p className="text-[9px] text-sidebar-foreground/50 mt-0.5">© 2025 LÜM. Tous droits réservés.</p>
           </div>
         </div>
       </aside>

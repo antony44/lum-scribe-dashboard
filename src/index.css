@@ -132,4 +132,9 @@
   .dark-button {
     @apply dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80;
   }
+
+  /* Button animations */
+  .btn-hover-animation {
+    @apply transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98];
+  }
 }

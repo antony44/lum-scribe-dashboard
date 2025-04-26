@@ -39,8 +39,7 @@ import {
   Check, 
   Plus, 
   Trash2, 
-  RefreshCw,
-  ExternalLink,
+  RefreshCw
 } from "lucide-react";
 
 // Simulate user's subscription plan
@@ -92,10 +91,11 @@ const TONE_OPTIONS = [
 
 const CONTENT_TYPES = [
   { value: "in_depth", label: "Article approfondi" },
+  { value: "guide", label: "Guide pratique / Tutoriel" },
   { value: "comparison", label: "Comparatif" },
   { value: "faq", label: "FAQ dédiée" },
-  { value: "checklist", label: "Checklist" },
-  { value: "synthesis", label: "Synthèse de veille" }
+  { value: "checklist", label: "Checklist opérationnelle" },
+  { value: "synthesis", label: "Synthèse de veille approfondie" }
 ];
 
 const AUTHORITY_LEVELS = [
@@ -165,13 +165,13 @@ export default function OrderForm() {
     // Simulate AI generation delay
     setTimeout(() => {
       if (field === "companyContext" && (website || company)) {
-        form.setValue("companyContext", `${company || "Votre entreprise"} est spécialisée dans les solutions innovantes qui répondent aux besoins de ses clients avec une approche centrée sur la qualité et la satisfaction. Avec plusieurs années d'expérience dans le secteur, l'entreprise se distingue par son expertise et sa capacité à s'adapter aux évolutions du marché.`);
+        form.setValue("companyContext", `${company || "Votre entreprise"} est spécialisée dans [secteur d'activité] et propose [produits/services] pour [cible]. L'entreprise se distingue par [avantages concurrentiels] et cherche à renforcer sa position sur [marché cible].`);
       }
       
       setGenerating(null);
       
       toast.success("Contenu généré", {
-        description: "Le texte a été généré avec succès par notre IA",
+        description: "Le texte a été généré avec succès par le moteur LÜM",
       });
     }, 1800);
   };
@@ -345,7 +345,7 @@ export default function OrderForm() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            Générer le contexte avec IA
+                            Utilisez l'icône ✨ pour insérer un modèle pour vous aider
                           </TooltipContent>
                         </Tooltip>
                       </FormLabel>
@@ -424,7 +424,7 @@ export default function OrderForm() {
                             <Info className="h-4 w-4 text-muted-foreground" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            Si vous ne saisissez pas de sujet, notre moteur sélectionnera automatiquement le sujet SEO le plus pertinent en fonction du contexte de l'entreprise et de la catégorie.
+                            Si vous ne saisissez pas de sujet, notre moteur LÜM sélectionnera automatiquement le sujet SEO le plus pertinent en fonction du contexte de l'entreprise et de la catégorie.
                           </TooltipContent>
                         </Tooltip>
                       </FormLabel>
@@ -505,7 +505,7 @@ export default function OrderForm() {
                           disabled={USER_PLAN.articlesPerMonth < 16}
                         >
                           {CONTENT_TYPES.map((type) => (
-                            <div key={type.value} className="flex items-center space-x-2">
+                            <div key={type.value} className={`flex items-center space-x-2 ${type.value === 'in_depth' ? 'order-first' : ''}`}>
                               <RadioGroupItem 
                                 value={type.value} 
                                 id={`content-type-${type.value}`}
@@ -514,7 +514,7 @@ export default function OrderForm() {
                               />
                               <label 
                                 htmlFor={`content-type-${type.value}`}
-                                className={`text-sm ${USER_PLAN.articlesPerMonth < 16 ? "text-muted-foreground" : ""}`}
+                                className={`text-sm ${USER_PLAN.articlesPerMonth < 16 ? "text-muted-foreground" : ""} ${type.value === 'in_depth' ? 'font-medium' : ''}`}
                               >
                                 {type.label}
                               </label>
@@ -558,7 +558,7 @@ export default function OrderForm() {
               
               {/* Liens internes */}
               <div className="mb-4">
-                <FormLabel className="block mb-1">Liens internes à inclure</FormLabel>
+                <FormLabel className="block mb-1">Liens internes à inclure (si possible et pertinent)</FormLabel>
                 <div className="flex flex-col gap-2">
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
                     <Input
@@ -577,7 +577,7 @@ export default function OrderForm() {
                       type="button"
                       onClick={addInternalLink}
                       disabled={!newLink.title || !newLink.url}
-                      className="w-full md:w-auto"
+                      className="w-full md:w-auto btn-hover-animation"
                       variant="outline"
                     >
                       <Plus className="h-4 w-4 mr-1" /> Ajouter
@@ -637,13 +637,13 @@ export default function OrderForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-1">
-                        Émojis dans les titres ?
+                        Émojis dans les sous-titres ?
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Info className="h-4 w-4 text-muted-foreground" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            Les emojis améliorent l'UX dans la plupart des cas, mais il vaut mieux éviter dans les sujets sérieux (droit, administration, institutions).
+                            Améliore l'UX sur les articles pédagogiques, à éviter pour les sujets juridiques, administratifs...
                           </TooltipContent>
                         </Tooltip>
                       </FormLabel>
@@ -757,7 +757,7 @@ export default function OrderForm() {
                 
                 <Button
                   type="submit"
-                  className="bg-[#0061E0] hover:bg-[#0061E0]/90 order-1 sm:order-2 text-base px-10 py-3 h-auto transition-all"
+                  className="bg-[#0061E0] hover:bg-[#0061E0]/90 order-1 sm:order-2 text-base px-10 py-3 h-auto transition-all btn-hover-animation"
                   disabled={submitting || !form.formState.isValid}
                 >
                   {submitting ? (

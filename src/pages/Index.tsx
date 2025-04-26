@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-// Remove TopBar import
 import StatCard from "@/components/StatCard";
 import QuotaCircle from "@/components/QuotaCircle";
 import OrdersTable from "@/components/OrdersTable";
@@ -29,19 +29,17 @@ export default function Index() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background font-inter">
-      {/* Removed TopBar component */}
-
       <div className="flex flex-col-reverse lg:flex-row gap-6 lg:gap-8 px-2 lg:px-8 py-4 w-full animate-fade-in">
         {/* Left: Welcome + stats + CTA */}
         <div className="flex-1 min-w-0">
           {/* Welcome card */}
-          <div className="bg-white rounded-xl border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1">
+          <div className="bg-card rounded-xl border shadow-sm px-6 py-5 mb-6 flex flex-col gap-1">
             <div className="text-2xl font-semibold mb-2 flex items-center">
               <span className="mr-2 text-2xl">👋</span>
               <span>Bonjour {PRENOM}&nbsp;!</span>
             </div>
-            <div className="text-gray-600 mb-2">
-              Il vous reste <span className="font-semibold text-blue-600">{ARTICLES_RESTANT} articles</span> sur le plan <span className="font-semibold">{PLAN}</span>.<br />
+            <div className="text-gray-600 dark:text-gray-300 mb-2">
+              Il vous reste <span className="font-semibold text-blue-600 dark:text-blue-400">{ARTICLES_RESTANT} articles</span> sur le plan <span className="font-semibold">{PLAN}</span>.<br />
               Passez au niveau supérieur pour plus de contenu !
             </div>
             {/* Stats cards */}
@@ -49,19 +47,19 @@ export default function Index() {
               <StatCard
                 value={ARTICLES_GEN}
                 label="articles générés"
-                tooltip="Nombre total d’articles créés grâce à LÜM."
-                trend="↑96 %"
+                tooltip="Nombre total d'articles créés grâce à LÜM."
+                trend="↑96 %"
               />
               <StatCard
-                value={QUOTA_POURCENT + " %"}
+                value={QUOTA_POURCENT + " %"}
                 label="% du quota utilisé"
-                tooltip="Pourcentage d’utilisation de votre quota mensuel."
+                tooltip="Pourcentage d'utilisation de votre quota mensuel."
               />
               <StatCard
-                value={PERF + " %"}
+                value={PERF + " %"}
                 label="Performance éditoriale"
                 badge="Excellente"
-                tooltip="La qualité des articles selon l’équipe éditoriale."
+                tooltip="La qualité des articles selon l'équipe éditoriale."
               />
             </div>
             <Button

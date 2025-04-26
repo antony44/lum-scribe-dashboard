@@ -12,14 +12,14 @@ import {
   Bell,
   FileText as FileDocument,
   X,
-  Check
+  Check,
+  LifeBuoy
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
-import Logo from "./Logo";
 
 const navItems = [
   { label: "Accueil", path: "/", icon: Home },
@@ -27,8 +27,8 @@ const navItems = [
   { label: "Analytics", path: "/analytics", icon: ChartBar },
   { label: "Mon Compte", path: "/account", icon: User },
   { label: "Factures", path: "/invoices", icon: FileDocument },
-  { label: "FAQ", path: "/support", icon: HelpCircle },
-  { label: "Support", path: "/support", icon: HelpCircle },
+  { label: "FAQ", path: "/faq", icon: HelpCircle },
+  { label: "Support", path: "/support", icon: LifeBuoy },
 ];
 
 // Données de démonstration pour les notifications
@@ -102,10 +102,9 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo Section */}
+          {/* Logo Section - Fixed to only show one LÜM logo */}
           <div className="p-4 flex items-center">
-            <Logo />
-            <span className="ml-2 font-black text-xl tracking-tighter">LÜM</span>
+            <span className="font-black text-xl tracking-tighter">LÜM</span>
           </div>
 
           {/* User Profile Section */}
@@ -215,7 +214,7 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
             </div>
           </div>
 
-          {/* Footer/Version */}
+          {/* Footer/Version - Updated year to 2025 */}
           <div className="p-4 text-center text-xs text-white/50">
             <p>LÜM v1.0.0</p>
             <p className="mt-1">© 2025 LÜM. Tous droits réservés.</p>

@@ -358,26 +358,26 @@ export default function OrderForm() {
             {/* Visual ref: ChatGPT Image 25 avr. 2025, 21_05_58.png */}
           </div>
           {/* Right side: Help block */}
-          <div className="dark:bg-[#161C24] rounded-xl p-6 border text-sm min-h-[180px] flex flex-col mb-4 md:mb-0 hover:dark:bg-[#202837] transition-colors">
-            <div className="font-semibold mb-3 dark:text-white">Besoin d'aide&nbsp;?</div>
+          <div className="bg-[#F6F8FA] rounded-xl p-6 border text-sm min-h-[180px] flex flex-col mb-4 md:mb-0">
+            <div className="font-semibold mb-3">Besoin d’aide&nbsp;?</div>
             <div className="flex flex-col gap-2">
               <a
                 href="#"
-                className="text-[#0061E0] hover:underline"
+                className="text-blue-600 hover:underline"
                 tabIndex={0}
               >
                 Exemple de consigne efficace
               </a>
               <a
                 href="#"
-                className="text-[#0061E0] hover:underline"
+                className="text-blue-600 hover:underline"
                 tabIndex={0}
               >
                 Bonnes pratiques de rédaction
               </a>
               <a
                 href="#"
-                className="text-[#0061E0] hover:underline"
+                className="text-blue-600 hover:underline"
                 tabIndex={0}
               >
                 Contactez le support

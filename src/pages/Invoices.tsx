@@ -21,14 +21,14 @@ const Invoices = () => {
         <p className="text-muted-foreground">Gérez vos factures et vos paiements.</p>
       </div>
       
-      <Card className="bg-card border-border">
+      <Card className="bg-card">
         <CardHeader>
           <CardTitle className="text-card-foreground">Historique de facturation</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table className="dark-table">
+          <Table>
             <TableHeader>
-              <TableRow className="border-border">
+              <TableRow>
                 <TableHead className="text-foreground">N° Facture</TableHead>
                 <TableHead className="text-foreground">Date</TableHead>
                 <TableHead className="text-foreground">Montant</TableHead>
@@ -48,13 +48,8 @@ const Invoices = () => {
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="dark-button"
-                    >
-                      <Download className="h-4 w-4 mr-2" /> 
-                      Télécharger
+                    <Button variant="outline" size="sm">
+                      <Download className="h-4 w-4 mr-2" /> Télécharger
                     </Button>
                   </TableCell>
                 </TableRow>

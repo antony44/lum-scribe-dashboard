@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -13,12 +12,12 @@ const FAQ = () => {
       title: "Général",
       items: [
         {
-          question: "Comment fonctionne l'IA de LÜM ?",
-          answer: "L'IA de LÜM analyse vos besoins et génère du contenu hautement qualitatif adapté à votre audience et à vos objectifs marketing."
+          question: "Comment fonctionne le moteur LÜM ?",
+          answer: "Le moteur LÜM analyse vos besoins et crée du contenu hautement qualitatif adapté à votre audience et à vos objectifs marketing."
         },
         {
           question: "Quelle est la différence entre les différents forfaits ?",
-          answer: "Nos forfaits diffèrent par le nombre d'articles générables par mois, la longueur maximale des articles, et l'accès à des fonctionnalités premium comme les analyses avancées."
+          answer: "Nos forfaits diffèrent par le nombre d'articles disponibles par mois, la longueur maximale des articles, et l'accès à des fonctionnalités premium comme les analyses avancées."
         },
         {
           question: "Puis-je annuler mon abonnement à tout moment ?",
@@ -30,8 +29,8 @@ const FAQ = () => {
       title: "Articles et Commandes",
       items: [
         {
-          question: "Comment commander un article ?",
-          answer: "Pour commander un article, rendez-vous sur la page 'Faire mon Article' et remplissez le formulaire de commande avec les détails demandés."
+          question: "Comment créer un article ?",
+          answer: "Pour créer un article, rendez-vous sur la page 'Créer un Article' et remplissez le formulaire avec les détails demandés."
         },
         {
           question: "Combien d'articles puis-je commander par mois ?",
@@ -73,7 +72,7 @@ const FAQ = () => {
         },
         {
           question: "Comment obtenir une facture ?",
-          answer: "Toutes vos factures sont automatiquement générées et disponibles dans la section 'Factures' de votre tableau de bord."
+          answer: "Toutes vos factures sont automatiquement disponibles dans la section 'Factures' de votre tableau de bord."
         }
       ]
     }

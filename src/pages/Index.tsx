@@ -1,14 +1,10 @@
-
-// Home/Dashboard: “Accueil” + main LÜM dashboard
-import TopBar from "@/components/TopBar";
+import React, { useState } from "react";
+// Remove TopBar import
 import StatCard from "@/components/StatCard";
 import QuotaCircle from "@/components/QuotaCircle";
 import OrdersTable from "@/components/OrdersTable";
 import { Button } from "@/components/ui/button";
-// Remove the next line:
-// import { toast } from "@/components/ui/toaster";
 import { toast } from "@/hooks/use-toast";
-import React, { useState } from "react";
 
 const PRENOM = "Clara";
 const PLAN = "Plan Pro";
@@ -26,15 +22,14 @@ export default function Index() {
       setLoading(false);
       toast({
         title: "Nouvelle commande",
-        description: "Votre nouvelle commande a été démarrée avec succès !",
+        description: "Votre nouvelle commande a été démarrée avec succès !",
       });
     }, 1200);
   };
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background font-inter">
-      {/* Top bar */}
-      <TopBar />
+      {/* Removed TopBar component */}
 
       <div className="flex flex-col-reverse lg:flex-row gap-6 lg:gap-8 px-2 lg:px-8 py-4 w-full animate-fade-in">
         {/* Left: Welcome + stats + CTA */}

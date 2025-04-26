@@ -20,7 +20,7 @@ import {
   Tooltip as RechartsTooltip,
   ResponsiveContainer 
 } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/ui/chart";
 import StatCard from "@/components/StatCard";
 import ActivityHeatmap from "@/components/ActivityHeatmap";
 import BestArticles from "@/components/BestArticles";
@@ -141,10 +141,16 @@ const Analytics = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                       <XAxis dataKey="name" stroke="#888" fontSize={12} />
                       <YAxis stroke="#888" fontSize={12} />
-                      <ChartTooltip 
-                        content={props => (
-                          <ChartTooltipContent {...props} />
-                        )} 
+                      <RechartsTooltip 
+                        contentStyle={{
+                          backgroundColor: "#fff",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "0.375rem",
+                          padding: "0.5rem",
+                          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+                        }}
+                        formatter={(value) => [`${value}`, 'Commandes']}
+                        labelFormatter={(label) => `Mois: ${label}`}
                       />
                       <Area 
                         type="monotone" 

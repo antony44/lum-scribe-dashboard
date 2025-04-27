@@ -1,73 +1,19 @@
 
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { 
-  LayoutDashboard,
-  FileText,
-  ChartBar,
-  User,
-  HelpCircle,
-  Moon,
-  Sun,
-  Bell,
-  FileText as FileDocument,
-  X,
-  Check,
-  LifeBuoy,
-  BookOpen
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Switch } from "@/components/ui/switch";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/sonner";
-
-const navItems = [
-  { label: "Tableau de Bord", path: "/", icon: LayoutDashboard },
-  { label: "Créer un Article", path: "/order", icon: FileText },
-  { label: "Analytics", path: "/analytics", icon: ChartBar },
-  { label: "Mon Compte", path: "/account", icon: User },
-  { label: "Factures", path: "/invoices", icon: FileDocument },
-  { label: "FAQ", path: "/faq", icon: HelpCircle },
-  { label: "Ressources", path: "/resources", icon: BookOpen },
-  { label: "Support", path: "/support", icon: LifeBuoy },
-];
-
-// Données de démonstration pour les notifications
-const notificationsData = [
-  { id: 1, read: false, title: "Votre article est prêt", description: "Article sur le marketing digital terminé", time: "Il y a 15 min" },
-  { id: 2, read: false, title: "Mise à jour de LÜM", description: "Découvrez les nouvelles fonctionnalités", time: "Il y a 2h" },
-  { id: 3, read: true, title: "Article envoyé", description: "Article expédié avec succès", time: "Il y a 1j" },
-  { id: 4, read: true, title: "Nouvelle fonctionnalité", description: "Essayez notre nouveau moteur LÜM", time: "Il y a 3j" }
-];
+import { UserProfile } from "./sidebar/UserProfile";
+import { NotificationsPopover } from "./sidebar/NotificationsPopover";
+import { NavigationItems } from "./sidebar/NavigationItems";
+import { DarkModeToggle } from "./sidebar/DarkModeToggle";
+import Logo from "./Logo";
 
 interface LumSidebarProps {
   activeSection?: string;
 }
 
 export default function LumSidebar({ activeSection }: LumSidebarProps) {
-  const [darkMode, setDarkMode] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [notifications, setNotifications] = useState(notificationsData);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-
+  
   const toggleMobileSidebar = () => setMobileOpen(!mobileOpen);
-  
-  const unreadNotifications = notifications.filter(n => !n.read).length;
-  
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
-    toast.success("Toutes les notifications ont été marquées comme lues");
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
 
   return (
     <>
@@ -105,115 +51,19 @@ export default function LumSidebar({ activeSection }: LumSidebarProps) {
         <div className="flex flex-col h-full">
           {/* Logo Section */}
           <div className="p-4 flex items-center justify-center">
-            <span className="font-black text-xl tracking-tighter">LÜM</span>
+            <Logo />
           </div>
 
-          {/* User Profile Section */}
-          <div className="px-4 py-3 flex items-center space-x-3 border-b border-sidebar-border">
-            <Avatar className="h-12 w-12 border-2 border-sidebar-border">
-              <AvatarImage src="/avatar.jpg" alt="User" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium">John Doe</p>
-              <p className="text-sm opacity-70">Premium</p>
-            </div>
-          </div>
+          <UserProfile />
 
           {/* Notifications Section */}
           <div className="px-4 py-3 border-b border-sidebar-border">
-            <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
-              <PopoverTrigger asChild>
-                <button 
-                  className="w-full flex items-center px-2 py-2 rounded-lg transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                >
-                  <Bell className="w-5 h-5 mr-3" />
-                  <span>Notifications</span>
-                  {unreadNotifications > 0 && (
-                    <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-[#B91226] text-xs font-medium">
-                      {unreadNotifications}
-                    </span>
-                  )}
-                </button>
-              </PopoverTrigger>
-              <PopoverContent 
-                className="w-80 p-0 bg-card dark:bg-card shadow-lg rounded-lg border border-border no-scrollbar max-h-[400px] overflow-y-auto"
-                align="start" 
-                sideOffset={5}
-              >
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                  <h3 className="font-semibold text-foreground">Notifications</h3>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={markAllAsRead}
-                    className="h-8 text-xs dark:text-foreground dark:hover:bg-secondary dark:hover:text-foreground"
-                    disabled={unreadNotifications === 0}
-                  >
-                    <Check className="w-4 h-4 mr-1" />
-                    Tout marquer comme lu
-                  </Button>
-                </div>
-                <div className="overflow-y-auto no-scrollbar">
-                  {notifications.length === 0 ? (
-                    <div className="py-8 text-center text-muted-foreground">
-                      <p>Aucune notification</p>
-                    </div>
-                  ) : (
-                    notifications.map((notification) => (
-                      <div 
-                        key={notification.id}
-                        className={`px-4 py-3 border-b border-border last:border-0 hover:bg-muted cursor-pointer ${notification.read ? '' : 'bg-blue-50 dark:bg-blue-900/10'}`}
-                      >
-                        <div className="flex justify-between items-start">
-                          <h4 className="font-medium text-sm text-foreground">{notification.title}</h4>
-                          {!notification.read && (
-                            <span className="h-2 w-2 rounded-full bg-blue-500"></span>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-1">{notification.description}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </PopoverContent>
-            </Popover>
+            <NotificationsPopover />
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto no-scrollbar">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.path + item.label}
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex items-center px-4 py-2.5 rounded-lg transition-all duration-200
-                  ${isActive || activeSection === item.label
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground font-semibold' 
-                    : 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`
-                }
-                end={item.path === "/"}
-              >
-                <item.icon className="w-5 h-5 mr-3" />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </nav>
+          <NavigationItems activeSection={activeSection} />
 
-          {/* Dark Mode Toggle */}
-          <div className="p-4 border-t border-sidebar-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-sidebar-foreground">
-                {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                <span className="text-sm">Mode sombre</span>
-              </div>
-              <Switch
-                checked={darkMode}
-                onCheckedChange={toggleDarkMode}
-              />
-            </div>
-          </div>
+          <DarkModeToggle />
 
           {/* Footer/Version */}
           <div className="p-3 text-center border-t border-sidebar-border">

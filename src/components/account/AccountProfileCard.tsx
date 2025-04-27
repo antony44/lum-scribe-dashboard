@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -51,26 +52,7 @@ const ProfileEditForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex justify-center mb-6">
-        <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
-          <Avatar className="h-24 w-24 border-4 border-white shadow-md">
-            <AvatarImage src={profile.avatar_url} alt="Votre avatar" />
-            <AvatarFallback>{profile.first_name?.[0]}{profile.last_name?.[0]}</AvatarFallback>
-          </Avatar>
-          <div className="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-            <Upload className="w-6 h-6 text-white" />
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
-      </div>
-
+    <form onSubmit={handleSubmit} className="space-y-4 w-full">
       <div className="space-y-2">
         <label>Prénom</label>
         <Input 
@@ -111,6 +93,8 @@ const ProfileEditForm = ({
 const AccountProfileCard = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { uploadAvatar } = useUserProfile();
 
   const { 
     data: profile, 
@@ -130,6 +114,20 @@ const AccountProfileCard = () => {
     enabled: !!user
   });
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = await uploadAvatar(user!, file);
+      if (url) {
+        toast.success("Avatar mis à jour avec succès");
+      }
+    }
+  };
+
   if (!user || isLoading) return null;
 
   const getInitials = () => {
@@ -144,14 +142,21 @@ const AccountProfileCard = () => {
     <Card className="border shadow-sm animate-fade-in">
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-          <div className="relative group">
+          <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
             <Avatar className="h-24 w-24 border-4 border-white shadow-md">
               <AvatarImage src={avatarUrl} alt="Votre avatar" />
               <AvatarFallback>{getInitials()}</AvatarFallback>
             </Avatar>
-            <div className="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
-              <span className="text-xs text-white font-medium">Changer</span>
+            <div className="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+              <Upload className="w-6 h-6 text-white" />
             </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
           </div>
           
           {!isEditing ? (

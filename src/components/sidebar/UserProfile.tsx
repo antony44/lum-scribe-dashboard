@@ -6,11 +6,27 @@ import { LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
+import { useQuery } from "@tanstack/react-query";
 
 export function UserProfile() {
   const { user } = useAuth();
   const navigate = useNavigate();
   
+  const { data: profile } = useQuery({
+    queryKey: ['userProfile', user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user
+  });
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -21,28 +37,35 @@ export function UserProfile() {
     }
   };
 
-  // Get initials from email or use default
   const getInitials = () => {
-    if (!user || !user.email) return "Ü";
-    return user.email.substring(0, 2).toUpperCase();
+    const firstName = profile?.first_name || '';
+    const lastName = profile?.last_name || '';
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || 'Ü';
   };
 
-  // Get name from email or use default
   const getName = () => {
-    if (!user || !user.email) return "Utilisateur";
-    return user.email.split("@")[0];
+    const firstName = profile?.first_name || '';
+    const lastName = profile?.last_name || '';
+    return firstName || lastName 
+      ? `${firstName} ${lastName}`.trim()
+      : 'Utilisateur';
   };
 
   return (
     <div className="px-4 py-3 flex items-center justify-between border-b border-sidebar-border">
       <div className="flex items-center space-x-3">
         <Avatar className="h-12 w-12 border-2 border-sidebar-border">
-          <AvatarImage src="/avatar.jpg" alt="User" />
+          <AvatarImage 
+            src={profile?.avatar_url || "/avatar.jpg"} 
+            alt="User" 
+          />
           <AvatarFallback>{getInitials()}</AvatarFallback>
         </Avatar>
         <div>
           <p className="font-medium">{getName()}</p>
-          <p className="text-sm opacity-70">Premium</p>
+          <p className="text-sm opacity-70">
+            {profile?.current_plan || 'Basic'}
+          </p>
         </div>
       </div>
       

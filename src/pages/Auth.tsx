@@ -1,18 +1,28 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/sonner";
+import { Loader2 } from "lucide-react";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const { session } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (session) {
+      navigate("/");
+    }
+  }, [session, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,18 +35,26 @@ export default function Auth() {
           password,
         });
         if (error) throw error;
-        toast.success("Inscription réussie! Vous pouvez maintenant vous connecter.");
-        setIsSignUp(false);
+        toast.success("Inscription réussie! Veuillez vérifier votre email pour confirmer votre compte.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
-        navigate("/");
+        toast.success("Connexion réussie!");
       }
     } catch (error: any) {
-      toast.error(error.message);
+      let errorMessage = error.message;
+      
+      // Provide more user-friendly error messages
+      if (errorMessage.includes("Email not confirmed")) {
+        errorMessage = "Email non confirmé. Veuillez vérifier votre boîte mail.";
+      } else if (errorMessage.includes("Invalid login credentials")) {
+        errorMessage = "Email ou mot de passe incorrect.";
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -80,11 +98,16 @@ export default function Auth() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading
-                ? "Chargement..."
-                : isSignUp
-                ? "S'inscrire"
-                : "Se connecter"}
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Chargement...
+                </span>
+              ) : isSignUp ? (
+                "S'inscrire"
+              ) : (
+                "Se connecter"
+              )}
             </Button>
             <Button
               type="button"

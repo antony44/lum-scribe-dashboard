@@ -1,4 +1,3 @@
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
@@ -56,8 +55,8 @@ export function UserProfile() {
       <div className="flex items-center space-x-3">
         <Avatar className="h-12 w-12 border-2 border-sidebar-border">
           <AvatarImage 
-            src={profile?.avatar_url || "/avatar.jpg"} 
-            alt="User" 
+            src={profile?.avatar_url} 
+            alt={getName()}
           />
           <AvatarFallback>{getInitials()}</AvatarFallback>
         </Avatar>

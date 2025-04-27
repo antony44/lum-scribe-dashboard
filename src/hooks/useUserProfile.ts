@@ -44,5 +44,31 @@ export const useUserProfile = () => {
     }
   };
 
-  return { updateProfile, isLoading };
+  const uploadAvatar = async (user: User, file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      await updateProfile(user, { avatar_url: publicUrl });
+      
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      toast.error("Impossible de télécharger l'avatar");
+      return null;
+    }
+  };
+
+  return { updateProfile, uploadAvatar, isLoading };
 };

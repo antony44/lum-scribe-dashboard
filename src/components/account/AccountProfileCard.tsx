@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +9,7 @@ import { toast } from "@/components/ui/sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from '@supabase/supabase-js';
+import { Upload } from 'lucide-react';
 
 const ProfileEditForm = ({ 
   user, 
@@ -23,7 +23,8 @@ const ProfileEditForm = ({
   const [firstName, setFirstName] = useState(profile.first_name || '');
   const [lastName, setLastName] = useState(profile.last_name || '');
   const [email, setEmail] = useState(profile.email || '');
-  const { updateProfile, isLoading } = useUserProfile();
+  const { updateProfile, uploadAvatar, isLoading } = useUserProfile();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,8 +36,41 @@ const ProfileEditForm = ({
     if (success) onCancel();
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = await uploadAvatar(user, file);
+      if (url) {
+        toast.success("Avatar mis à jour avec succès");
+      }
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex justify-center mb-6">
+        <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+          <Avatar className="h-24 w-24 border-4 border-white shadow-md">
+            <AvatarImage src={profile.avatar_url} alt="Votre avatar" />
+            <AvatarFallback>{profile.first_name?.[0]}{profile.last_name?.[0]}</AvatarFallback>
+          </Avatar>
+          <div className="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+            <Upload className="w-6 h-6 text-white" />
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
+      </div>
+
       <div className="space-y-2">
         <label>Prénom</label>
         <Input 

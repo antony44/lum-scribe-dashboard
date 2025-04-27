@@ -24,8 +24,7 @@ const ProfileEditForm = ({
   const [firstName, setFirstName] = useState(profile.first_name || '');
   const [lastName, setLastName] = useState(profile.last_name || '');
   const [email, setEmail] = useState(profile.email || '');
-  const { updateProfile, uploadAvatar, isLoading } = useUserProfile();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { updateProfile, isLoading } = useUserProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,20 +34,6 @@ const ProfileEditForm = ({
       email 
     });
     if (success) onCancel();
-  };
-
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = await uploadAvatar(user, file);
-      if (url) {
-        toast.success("Avatar mis à jour avec succès");
-      }
-    }
   };
 
   return (
@@ -123,7 +108,7 @@ const AccountProfileCard = () => {
     if (file) {
       const url = await uploadAvatar(user!, file);
       if (url) {
-        toast.success("Avatar mis à jour avec succès");
+        toast.success("Photo de profil mise à jour");
       }
     }
   };
@@ -136,7 +121,7 @@ const AccountProfileCard = () => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
-  const avatarUrl = profile?.avatar_url || 'https://i.pravatar.cc/150?img=32';
+  const avatarUrl = profile?.avatar_url;
 
   return (
     <Card className="border shadow-sm animate-fade-in">
@@ -144,7 +129,7 @@ const AccountProfileCard = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
           <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
             <Avatar className="h-24 w-24 border-4 border-white shadow-md">
-              <AvatarImage src={avatarUrl} alt="Votre avatar" />
+              <AvatarImage src={avatarUrl} alt="Photo de profil" />
               <AvatarFallback>{getInitials()}</AvatarFallback>
             </Avatar>
             <div className="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -173,10 +158,9 @@ const AccountProfileCard = () => {
               <div className="mt-4">
                 <Button 
                   variant="default" 
-                  className="bg-blue-600 hover:bg-blue-700 transition-colors"
                   onClick={() => setIsEditing(true)}
                 >
-                  Modifier
+                  Modifier mes informations
                 </Button>
               </div>
             </div>

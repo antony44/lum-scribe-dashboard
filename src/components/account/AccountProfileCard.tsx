@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/AuthProvider";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { toast } from "@/components/ui/sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from '@supabase/supabase-js';
 import { Upload } from 'lucide-react';
@@ -21,9 +21,10 @@ const ProfileEditForm = ({
   profile: any, 
   onCancel: () => void 
 }) => {
-  const [firstName, setFirstName] = useState(profile.first_name || '');
-  const [lastName, setLastName] = useState(profile.last_name || '');
-  const [email, setEmail] = useState(profile.email || '');
+  // Use empty strings as fallback values when profile data is not available
+  const [firstName, setFirstName] = useState(profile?.first_name || '');
+  const [lastName, setLastName] = useState(profile?.last_name || '');
+  const [email, setEmail] = useState(profile?.email || user?.email || '');
   const { updateProfile, isLoading } = useUserProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,20 +81,28 @@ const AccountProfileCard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { uploadAvatar } = useUserProfile();
+  const queryClient = useQueryClient();
 
   const { 
     data: profile, 
-    isLoading 
+    isLoading,
+    error
   } = useQuery({
     queryKey: ['userProfile', user?.id],
     queryFn: async () => {
+      if (!user?.id) return null;
+      
       const { data, error } = await supabase
         .from('Clients')
         .select('*')
-        .eq('id_clients', user?.id)
+        .eq('id_clients', user.id)
         .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        return null;
+      }
+      
       return data;
     },
     enabled: !!user
@@ -105,20 +114,51 @@ const AccountProfileCard = () => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = await uploadAvatar(user!, file);
+    if (!file || !user) return;
+    
+    try {
+      const url = await uploadAvatar(user, file);
       if (url) {
         toast.success("Photo de profil mise à jour");
+        // Refresh profile data
+        queryClient.invalidateQueries({ queryKey: ['userProfile', user.id] });
       }
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      toast.error("Une erreur est survenue lors du téléchargement de l'avatar");
     }
   };
 
-  if (!user || isLoading) return null;
+  // Show a loading state while profile data is being fetched
+  if (isLoading) {
+    return (
+      <Card className="border shadow-sm animate-fade-in">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center h-40">
+            <p>Chargement du profil...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Handle error state
+  if (error || !user) {
+    return (
+      <Card className="border shadow-sm animate-fade-in">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center h-40">
+            <p>Impossible de charger les informations du profil</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const getInitials = () => {
     const firstName = profile?.first_name || '';
     const lastName = profile?.last_name || '';
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || 'U';
   };
 
   const avatarUrl = profile?.avatar_url || null;
@@ -149,9 +189,9 @@ const AccountProfileCard = () => {
               <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
                 <div>
                   <h2 className="text-2xl font-bold">
-                    {profile?.first_name} {profile?.last_name}
+                    {profile?.first_name || ''} {profile?.last_name || ''}
                   </h2>
-                  <p className="text-muted-foreground">{profile?.email}</p>
+                  <p className="text-muted-foreground">{profile?.email || user.email}</p>
                 </div>
               </div>
               
@@ -166,9 +206,10 @@ const AccountProfileCard = () => {
             </div>
           ) : (
             <div className="flex-1">
+              {/* Only render the edit form if profile data is available */}
               <ProfileEditForm 
                 user={user} 
-                profile={profile} 
+                profile={profile || {}} 
                 onCancel={() => setIsEditing(false)} 
               />
             </div>

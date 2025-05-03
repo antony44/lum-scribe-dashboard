@@ -19,12 +19,38 @@ export const useUserProfile = () => {
   ) => {
     setIsLoading(true);
     try {
-      const { error } = await supabase
+      // First check if the user has a profile in the Clients table
+      const { data: existingProfile } = await supabase
         .from('Clients')
-        .update(profileData)
-        .eq('id_clients', user.id);
+        .select('*')
+        .eq('id_clients', user.id)
+        .single();
 
-      if (error) throw error;
+      let result;
+      
+      if (existingProfile) {
+        // Update existing profile
+        result = await supabase
+          .from('Clients')
+          .update(profileData)
+          .eq('id_clients', user.id);
+      } else {
+        // Create new profile
+        result = await supabase
+          .from('Clients')
+          .insert([{
+            id_clients: user.id,
+            email: profileData.email || user.email,
+            first_name: profileData.first_name || '',
+            last_name: profileData.last_name || '',
+            avatar_url: profileData.avatar_url || null,
+            current_plan: profileData.current_plan || 'Basic',
+            // We need a plans_id, so for now we'll use a default value
+            plans_id: '00000000-0000-0000-0000-000000000000'
+          }]);
+      }
+
+      if (result.error) throw result.error;
 
       // Update email in auth if changed
       if (profileData.email && profileData.email !== user.email) {

@@ -12,16 +12,22 @@ export function UserProfile() {
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading } = useQuery({
     queryKey: ['userProfile', user?.id],
     queryFn: async () => {
+      if (!user?.id) return null;
+      
       const { data, error } = await supabase
         .from('Clients')
         .select('*')
         .eq('id_clients', user?.id)
         .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        return null;
+      }
+      
       return data;
     },
     enabled: !!user
@@ -40,7 +46,7 @@ export function UserProfile() {
   const getInitials = () => {
     const firstName = profile?.first_name || '';
     const lastName = profile?.last_name || '';
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || 'Ü';
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || 'U';
   };
 
   const getName = () => {

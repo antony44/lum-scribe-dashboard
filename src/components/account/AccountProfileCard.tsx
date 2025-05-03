@@ -88,9 +88,9 @@ const AccountProfileCard = () => {
     queryKey: ['userProfile', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('Clients')
         .select('*')
-        .eq('id', user?.id)
+        .eq('id_clients', user?.id)
         .single();
       
       if (error) throw error;
@@ -121,6 +121,8 @@ const AccountProfileCard = () => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
+  // The clients table might not have an avatar_url field, 
+  // we'll need to update the useUserProfile hook to store this elsewhere
   const avatarUrl = profile?.avatar_url;
 
   return (

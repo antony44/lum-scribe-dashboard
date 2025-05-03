@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
@@ -15,9 +16,9 @@ export function UserProfile() {
     queryKey: ['userProfile', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('Clients')
         .select('*')
-        .eq('id', user?.id)
+        .eq('id_clients', user?.id)
         .single();
       
       if (error) throw error;

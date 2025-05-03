@@ -19,9 +19,9 @@ export const useUserProfile = () => {
     setIsLoading(true);
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from('Clients')
         .update(profileData)
-        .eq('id', user.id);
+        .eq('id_clients', user.id);
 
       if (error) throw error;
 
@@ -46,6 +46,14 @@ export const useUserProfile = () => {
 
   const uploadAvatar = async (user: User, file: File): Promise<string | null> => {
     try {
+      // First, ensure the storage bucket exists
+      const bucketExists = await checkBucketExists('avatars');
+      if (!bucketExists) {
+        console.error("The 'avatars' storage bucket does not exist");
+        toast.error("Configuration de stockage incorrecte");
+        return null;
+      }
+
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}-${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -60,6 +68,7 @@ export const useUserProfile = () => {
         .from('avatars')
         .getPublicUrl(filePath);
 
+      // Update the avatar_url in the Clients table
       await updateProfile(user, { avatar_url: publicUrl });
       
       return publicUrl;
@@ -67,6 +76,17 @@ export const useUserProfile = () => {
       console.error('Error uploading avatar:', error);
       toast.error("Impossible de télécharger l'avatar");
       return null;
+    }
+  };
+
+  // Helper to check if a storage bucket exists
+  const checkBucketExists = async (bucketName: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.storage.getBucket(bucketName);
+      if (error) return false;
+      return !!data;
+    } catch (_) {
+      return false;
     }
   };
 

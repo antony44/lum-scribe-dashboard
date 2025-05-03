@@ -11,328 +11,353 @@ export type Database = {
     Tables: {
       Articles: {
         Row: {
-          "Analyse SEO": string | null
-          "Article ID": number
-          "Commande liée": number | null
-          "Date de livraison": string | null
-          "Fichier .docx": string | null
-          HTML: string | null
-          "Statut (from Statue)": string | null
-          Sujet: string | null
-          Version: number | null
+          alt_img: string | null
+          clients_id: string
+          commandes_id: string
+          Fichier_docx: string | null
+          fichier_html: string | null
+          fichier_pdf: string | null
+          html: string | null
+          id_articles: string
+          intention_de_recherche: string | null
+          lien_image: string | null
+          logs_erreur: string | null
+          meta_description: string | null
+          mots_cles_principaux: string | null
+          mots_cles_secondaires: string | null
+          niveau_de_concurence: string | null
+          objectif_article: string | null
+          potentiel_seo: string | null
+          slug: string | null
+          statut: string | null
+          temps_lecture: string | null
+          titre: string | null
+          titre_seo: string | null
+          trigger_statut_article: string | null
+          volume_de_recherche: string | null
         }
         Insert: {
-          "Analyse SEO"?: string | null
-          "Article ID": number
-          "Commande liée"?: number | null
-          "Date de livraison"?: string | null
-          "Fichier .docx"?: string | null
-          HTML?: string | null
-          "Statut (from Statue)"?: string | null
-          Sujet?: string | null
-          Version?: number | null
+          alt_img?: string | null
+          clients_id?: string
+          commandes_id?: string
+          Fichier_docx?: string | null
+          fichier_html?: string | null
+          fichier_pdf?: string | null
+          html?: string | null
+          id_articles?: string
+          intention_de_recherche?: string | null
+          lien_image?: string | null
+          logs_erreur?: string | null
+          meta_description?: string | null
+          mots_cles_principaux?: string | null
+          mots_cles_secondaires?: string | null
+          niveau_de_concurence?: string | null
+          objectif_article?: string | null
+          potentiel_seo?: string | null
+          slug?: string | null
+          statut?: string | null
+          temps_lecture?: string | null
+          titre?: string | null
+          titre_seo?: string | null
+          trigger_statut_article?: string | null
+          volume_de_recherche?: string | null
         }
         Update: {
-          "Analyse SEO"?: string | null
-          "Article ID"?: number
-          "Commande liée"?: number | null
-          "Date de livraison"?: string | null
-          "Fichier .docx"?: string | null
-          HTML?: string | null
-          "Statut (from Statue)"?: string | null
-          Sujet?: string | null
-          Version?: number | null
+          alt_img?: string | null
+          clients_id?: string
+          commandes_id?: string
+          Fichier_docx?: string | null
+          fichier_html?: string | null
+          fichier_pdf?: string | null
+          html?: string | null
+          id_articles?: string
+          intention_de_recherche?: string | null
+          lien_image?: string | null
+          logs_erreur?: string | null
+          meta_description?: string | null
+          mots_cles_principaux?: string | null
+          mots_cles_secondaires?: string | null
+          niveau_de_concurence?: string | null
+          objectif_article?: string | null
+          potentiel_seo?: string | null
+          slug?: string | null
+          statut?: string | null
+          temps_lecture?: string | null
+          titre?: string | null
+          titre_seo?: string | null
+          trigger_statut_article?: string | null
+          volume_de_recherche?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "Articles_Commande liée_fkey"
-            columns: ["Commande liée"]
-            isOneToOne: false
+            foreignKeyName: "Articles_clients_id_fkey"
+            columns: ["clients_id"]
+            isOneToOne: true
+            referencedRelation: "Clients"
+            referencedColumns: ["id_clients"]
+          },
+          {
+            foreignKeyName: "Articles_commandes_id_fkey"
+            columns: ["commandes_id"]
+            isOneToOne: true
             referencedRelation: "Commandes"
-            referencedColumns: ["Commande ID"]
+            referencedColumns: ["id_commandes"]
           },
         ]
       }
       Clients: {
         Row: {
-          "Articles Restants": number | null
-          "Articles Restants (from Articles Restants)": number | null
-          "Articles Restants (from Articles Restants) 2": number | null
-          "Client ID": number
-          "Date de création": string | null
-          Email: string | null
-          Entreprise: string | null
-          Factures: number | null
-          Nom: string | null
-          "Nom du plan (from Plan actif)": string | null
-          Prénom: string | null
-          "Quota ID (from Articles Restants)": number | null
-          Statut: string | null
-          "Stripe Customer ID": string | null
+          created_at: string | null
+          email: string
+          first_name: string | null
+          id_clients: string
+          last_name: string | null
+          plans_id: string
+          stripe_customer_id: string | null
         }
         Insert: {
-          "Articles Restants"?: number | null
-          "Articles Restants (from Articles Restants)"?: number | null
-          "Articles Restants (from Articles Restants) 2"?: number | null
-          "Client ID": number
-          "Date de création"?: string | null
-          Email?: string | null
-          Entreprise?: string | null
-          Factures?: number | null
-          Nom?: string | null
-          "Nom du plan (from Plan actif)"?: string | null
-          Prénom?: string | null
-          "Quota ID (from Articles Restants)"?: number | null
-          Statut?: string | null
-          "Stripe Customer ID"?: string | null
+          created_at?: string | null
+          email: string
+          first_name?: string | null
+          id_clients?: string
+          last_name?: string | null
+          plans_id?: string
+          stripe_customer_id?: string | null
         }
         Update: {
-          "Articles Restants"?: number | null
-          "Articles Restants (from Articles Restants)"?: number | null
-          "Articles Restants (from Articles Restants) 2"?: number | null
-          "Client ID"?: number
-          "Date de création"?: string | null
-          Email?: string | null
-          Entreprise?: string | null
-          Factures?: number | null
-          Nom?: string | null
-          "Nom du plan (from Plan actif)"?: string | null
-          Prénom?: string | null
-          "Quota ID (from Articles Restants)"?: number | null
-          Statut?: string | null
-          "Stripe Customer ID"?: string | null
-        }
-        Relationships: []
-      }
-      Commandes: {
-        Row: {
-          "Article généré": number | null
-          Autorité: string | null
-          Catégorie: string | null
-          "Client ID (from Clients)": number | null
-          Clients: number | null
-          "Commande ID": number
-          Contexte: string | null
-          "Date commande": string | null
-          Emoji: string | null
-          "HTML Complet": string | null
-          "Lien blog/site": string | null
-          "Liens internes à privilégier": string | null
-          Objectif: string | null
-          Statut: string | null
-          Sujet: string | null
-          "Sujet à bannir": string | null
-          "Titre d’article": string | null
-          "Ton souhaité": string | null
-          "Type de contenu": string | null
-        }
-        Insert: {
-          "Article généré"?: number | null
-          Autorité?: string | null
-          Catégorie?: string | null
-          "Client ID (from Clients)"?: number | null
-          Clients?: number | null
-          "Commande ID": number
-          Contexte?: string | null
-          "Date commande"?: string | null
-          Emoji?: string | null
-          "HTML Complet"?: string | null
-          "Lien blog/site"?: string | null
-          "Liens internes à privilégier"?: string | null
-          Objectif?: string | null
-          Statut?: string | null
-          Sujet?: string | null
-          "Sujet à bannir"?: string | null
-          "Titre d’article"?: string | null
-          "Ton souhaité"?: string | null
-          "Type de contenu"?: string | null
-        }
-        Update: {
-          "Article généré"?: number | null
-          Autorité?: string | null
-          Catégorie?: string | null
-          "Client ID (from Clients)"?: number | null
-          Clients?: number | null
-          "Commande ID"?: number
-          Contexte?: string | null
-          "Date commande"?: string | null
-          Emoji?: string | null
-          "HTML Complet"?: string | null
-          "Lien blog/site"?: string | null
-          "Liens internes à privilégier"?: string | null
-          Objectif?: string | null
-          Statut?: string | null
-          Sujet?: string | null
-          "Sujet à bannir"?: string | null
-          "Titre d’article"?: string | null
-          "Ton souhaité"?: string | null
-          "Type de contenu"?: string | null
+          created_at?: string | null
+          email?: string
+          first_name?: string | null
+          id_clients?: string
+          last_name?: string | null
+          plans_id?: string
+          stripe_customer_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "Commandes_Client ID (from Clients)_fkey"
-            columns: ["Client ID (from Clients)"]
-            isOneToOne: false
-            referencedRelation: "Clients"
-            referencedColumns: ["Client ID"]
+            foreignKeyName: "Clients_plans_id_fkey"
+            columns: ["plans_id"]
+            isOneToOne: true
+            referencedRelation: "Plans"
+            referencedColumns: ["id_plans"]
           },
         ]
       }
-      Factures: {
+      Commandes: {
         Row: {
-          "Client ID (from Client)": number | null
-          "Date facture": string | null
-          "Facture ID": number
-          "Fichier PDF": string | null
-          Montant: number | null
-          Plan: number | null
-          "Stripe Invoice ID": string | null
+          autorite: string | null
+          categorie: string | null
+          clients_id: string
+          company_name: string | null
+          contexte: string | null
+          created_at: string
+          emoji: string | null
+          html_complet: string | null
+          id_commandes: string
+          lien_blog_site: string | null
+          liens_internes: string | null
+          logs_erreur: string | null
+          objectif: string | null
+          plans_id: string
+          statut: string | null
+          subject_ban: string | null
+          sujet: string | null
+          ton: string | null
+          trigger_statut: string
+          type_de_contenu: string | null
         }
         Insert: {
-          "Client ID (from Client)"?: number | null
-          "Date facture"?: string | null
-          "Facture ID": number
-          "Fichier PDF"?: string | null
-          Montant?: number | null
-          Plan?: number | null
-          "Stripe Invoice ID"?: string | null
+          autorite?: string | null
+          categorie?: string | null
+          clients_id?: string
+          company_name?: string | null
+          contexte?: string | null
+          created_at?: string
+          emoji?: string | null
+          html_complet?: string | null
+          id_commandes?: string
+          lien_blog_site?: string | null
+          liens_internes?: string | null
+          logs_erreur?: string | null
+          objectif?: string | null
+          plans_id?: string
+          statut?: string | null
+          subject_ban?: string | null
+          sujet?: string | null
+          ton?: string | null
+          trigger_statut?: string
+          type_de_contenu?: string | null
         }
         Update: {
-          "Client ID (from Client)"?: number | null
-          "Date facture"?: string | null
-          "Facture ID"?: number
-          "Fichier PDF"?: string | null
-          Montant?: number | null
-          Plan?: number | null
-          "Stripe Invoice ID"?: string | null
+          autorite?: string | null
+          categorie?: string | null
+          clients_id?: string
+          company_name?: string | null
+          contexte?: string | null
+          created_at?: string
+          emoji?: string | null
+          html_complet?: string | null
+          id_commandes?: string
+          lien_blog_site?: string | null
+          liens_internes?: string | null
+          logs_erreur?: string | null
+          objectif?: string | null
+          plans_id?: string
+          statut?: string | null
+          subject_ban?: string | null
+          sujet?: string | null
+          ton?: string | null
+          trigger_statut?: string
+          type_de_contenu?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "Factures_Client ID (from Client)_fkey"
-            columns: ["Client ID (from Client)"]
-            isOneToOne: false
+            foreignKeyName: "Commandes_clients_id_fkey"
+            columns: ["clients_id"]
+            isOneToOne: true
             referencedRelation: "Clients"
-            referencedColumns: ["Client ID"]
+            referencedColumns: ["id_clients"]
           },
           {
-            foreignKeyName: "Factures_Plan_fkey"
-            columns: ["Plan"]
-            isOneToOne: false
+            foreignKeyName: "Commandes_plans_id_fkey"
+            columns: ["plans_id"]
+            isOneToOne: true
             referencedRelation: "Plans"
-            referencedColumns: ["Plan ID"]
+            referencedColumns: ["id_plans"]
+          },
+        ]
+      }
+      factures: {
+        Row: {
+          commandes_id: string
+          created_at: string
+          date_emission: string | null
+          id_factures: string
+          montant: number | null
+          pdf_url: string | null
+          stripe_invoice_id: string | null
+        }
+        Insert: {
+          commandes_id?: string
+          created_at?: string
+          date_emission?: string | null
+          id_factures?: string
+          montant?: number | null
+          pdf_url?: string | null
+          stripe_invoice_id?: string | null
+        }
+        Update: {
+          commandes_id?: string
+          created_at?: string
+          date_emission?: string | null
+          id_factures?: string
+          montant?: number | null
+          pdf_url?: string | null
+          stripe_invoice_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "factures_commandes_id_fkey"
+            columns: ["commandes_id"]
+            isOneToOne: true
+            referencedRelation: "Commandes"
+            referencedColumns: ["id_commandes"]
           },
         ]
       }
       Plans: {
         Row: {
-          "Avantages principaux": string | null
-          "Économie annuelle (€)": string | null
-          "Nom du plan": string | null
-          "Plan ID": number
-          "Premium activé": string | null
-          "Prix annuel (€)": string | null
-          "Prix mensuel (€)": string | null
-          "Prix unitaire (€)": string | null
-          "Stripe Product ID": string | null
-          Type: string | null
-          "Volume/mois": string | null
+          created_at: string
+          cycle: string | null
+          economie_annuelle: number | null
+          id_plans: string
+          nom: string | null
+          prix_annuel: number | null
+          prix_mensuel: number | null
+          prix_unitaire: number | null
+          prix_unitaire_annuel: number | null
+          statut: string | null
+          stripe_plan_id: string | null
+          type: string | null
+          volume_mensuel: number | null
         }
         Insert: {
-          "Avantages principaux"?: string | null
-          "Économie annuelle (€)"?: string | null
-          "Nom du plan"?: string | null
-          "Plan ID": number
-          "Premium activé"?: string | null
-          "Prix annuel (€)"?: string | null
-          "Prix mensuel (€)"?: string | null
-          "Prix unitaire (€)"?: string | null
-          "Stripe Product ID"?: string | null
-          Type?: string | null
-          "Volume/mois"?: string | null
+          created_at?: string
+          cycle?: string | null
+          economie_annuelle?: number | null
+          id_plans?: string
+          nom?: string | null
+          prix_annuel?: number | null
+          prix_mensuel?: number | null
+          prix_unitaire?: number | null
+          prix_unitaire_annuel?: number | null
+          statut?: string | null
+          stripe_plan_id?: string | null
+          type?: string | null
+          volume_mensuel?: number | null
         }
         Update: {
-          "Avantages principaux"?: string | null
-          "Économie annuelle (€)"?: string | null
-          "Nom du plan"?: string | null
-          "Plan ID"?: number
-          "Premium activé"?: string | null
-          "Prix annuel (€)"?: string | null
-          "Prix mensuel (€)"?: string | null
-          "Prix unitaire (€)"?: string | null
-          "Stripe Product ID"?: string | null
-          Type?: string | null
-          "Volume/mois"?: string | null
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          created_at: string | null
-          current_plan: string | null
-          email: string | null
-          first_name: string | null
-          id: string
-          last_name: string | null
-          updated_at: string | null
-          username: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          current_plan?: string | null
-          email?: string | null
-          first_name?: string | null
-          id: string
-          last_name?: string | null
-          updated_at?: string | null
-          username?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          current_plan?: string | null
-          email?: string | null
-          first_name?: string | null
-          id?: string
-          last_name?: string | null
-          updated_at?: string | null
-          username?: string | null
+          created_at?: string
+          cycle?: string | null
+          economie_annuelle?: number | null
+          id_plans?: string
+          nom?: string | null
+          prix_annuel?: number | null
+          prix_mensuel?: number | null
+          prix_unitaire?: number | null
+          prix_unitaire_annuel?: number | null
+          statut?: string | null
+          stripe_plan_id?: string | null
+          type?: string | null
+          volume_mensuel?: number | null
         }
         Relationships: []
       }
       Quotas: {
         Row: {
-          "Articles Restants": number | null
-          Client: number | null
-          "Client ID (from Client)": number | null
-          "Dernier reset": string | null
-          "Prochain reset": string | null
-          "Quota ID": number | null
+          articles_restants: number
+          clients_id: string
+          created_at: string
+          dernier_reset: string | null
+          id_quotas: string
+          plans_id: string
+          prochain_reset: string | null
+          quota_initial: number
         }
         Insert: {
-          "Articles Restants"?: number | null
-          Client?: number | null
-          "Client ID (from Client)"?: number | null
-          "Dernier reset"?: string | null
-          "Prochain reset"?: string | null
-          "Quota ID"?: number | null
+          articles_restants: number
+          clients_id?: string
+          created_at?: string
+          dernier_reset?: string | null
+          id_quotas?: string
+          plans_id?: string
+          prochain_reset?: string | null
+          quota_initial: number
         }
         Update: {
-          "Articles Restants"?: number | null
-          Client?: number | null
-          "Client ID (from Client)"?: number | null
-          "Dernier reset"?: string | null
-          "Prochain reset"?: string | null
-          "Quota ID"?: number | null
+          articles_restants?: number
+          clients_id?: string
+          created_at?: string
+          dernier_reset?: string | null
+          id_quotas?: string
+          plans_id?: string
+          prochain_reset?: string | null
+          quota_initial?: number
         }
         Relationships: [
           {
-            foreignKeyName: "Quotas_Client_fkey"
-            columns: ["Client"]
-            isOneToOne: false
+            foreignKeyName: "Quotas_clients_id_fkey"
+            columns: ["clients_id"]
+            isOneToOne: true
             referencedRelation: "Clients"
-            referencedColumns: ["Client ID"]
+            referencedColumns: ["id_clients"]
+          },
+          {
+            foreignKeyName: "Quotas_plans_id_fkey"
+            columns: ["plans_id"]
+            isOneToOne: true
+            referencedRelation: "Plans"
+            referencedColumns: ["id_plans"]
           },
         ]
       }

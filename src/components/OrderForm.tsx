@@ -38,8 +38,23 @@ import {
   Check, 
   Plus, 
   Trash2, 
-  RefreshCw
+  RefreshCw,
+  Link as LinkIcon
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface OrderFormValues {
   firstName: string;
@@ -61,6 +76,7 @@ interface OrderFormValues {
   htmlType: string;
   confirmed: boolean;
   otherObjective?: string;
+  webhookUrl?: string;
 }
 
 const USER_PLAN = {
@@ -114,6 +130,8 @@ export default function OrderForm() {
   const [generating, setGenerating] = useState<string | null>(null);
   const [internalLinks, setInternalLinks] = useState<{title: string, url: string}[]>([]);
   const [newLink, setNewLink] = useState({ title: "", url: "" });
+  const [showWebhookSettings, setShowWebhookSettings] = useState(false);
+  const [webhookUrl, setWebhookUrl] = useState("");
   
   const form = useForm<OrderFormValues>({
     defaultValues: {
@@ -136,24 +154,75 @@ export default function OrderForm() {
       htmlType: "embed",
       confirmed: false,
       otherObjective: "",
+      webhookUrl: "",
     }
   });
   
-  const onSubmit = (data: OrderFormValues) => {
+  // Load saved webhook URL from localStorage
+  useEffect(() => {
+    const savedWebhookUrl = localStorage.getItem("orderFormWebhookUrl");
+    if (savedWebhookUrl) {
+      setWebhookUrl(savedWebhookUrl);
+      form.setValue("webhookUrl", savedWebhookUrl);
+    }
+  }, [form]);
+  
+  const onSubmit = async (data: OrderFormValues) => {
     setSubmitting(true);
     
     data.internalLinks = internalLinks;
     
-    setTimeout(() => {
-      setSubmitting(false);
-      toast.success("Commande envoyée avec succès", {
-        description: "Votre article sera prêt dans les prochaines 48h",
-      });
+    try {
+      // Save form data for local use
       console.log("Form submitted:", data);
       
-      form.reset();
-      setInternalLinks([]);
-    }, 1500);
+      // Trigger webhook if URL is provided
+      if (data.webhookUrl) {
+        try {
+          // Store webhook URL for future use
+          localStorage.setItem("orderFormWebhookUrl", data.webhookUrl);
+          
+          // Send data to webhook (Make.com)
+          const webhookResponse = await fetch(data.webhookUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            mode: "no-cors", // Needed for cross-origin requests
+            body: JSON.stringify({
+              ...data,
+              submittedAt: new Date().toISOString(),
+              source: "LUM Content Order Form"
+            }),
+          });
+          
+          console.log("Webhook triggered successfully");
+          
+        } catch (webhookError) {
+          console.error("Error triggering webhook:", webhookError);
+          toast.error("Erreur lors de l'envoi des données au webhook", {
+            description: "Vos données ont été enregistrées localement mais l'intégration avec Make a échoué.",
+          });
+        }
+      }
+      
+      setTimeout(() => {
+        setSubmitting(false);
+        toast.success("Commande envoyée avec succès", {
+          description: "Votre article sera prêt dans les prochaines 48h",
+        });
+        
+        form.reset();
+        setInternalLinks([]);
+      }, 1500);
+      
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setSubmitting(false);
+      toast.error("Erreur lors de l'envoi du formulaire", {
+        description: "Veuillez réessayer ou contacter le support.",
+      });
+    }
   };
   
   const generateWithAI = async (field: string) => {
@@ -187,15 +256,67 @@ export default function OrderForm() {
     setInternalLinks(internalLinks.filter((_, i) => i !== index));
   };
 
+  const handleWebhookSave = () => {
+    form.setValue("webhookUrl", webhookUrl);
+    localStorage.setItem("orderFormWebhookUrl", webhookUrl);
+    setShowWebhookSettings(false);
+    toast.success("Webhook enregistré", {
+      description: "Votre webhook a été configuré avec succès.",
+    });
+  };
+
   return (
     <Card className="w-full shadow-md dark:bg-[#161C24] border-zinc-200 dark:border-zinc-800">
       <CardContent className="p-6 space-y-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-lg font-semibold mb-4 pb-2 border-b dark:border-zinc-800">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold pb-2">
                 Informations de base
               </h2>
+              
+              <Popover open={showWebhookSettings} onOpenChange={setShowWebhookSettings}>
+                <PopoverTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex items-center gap-1"
+                  >
+                    <LinkIcon className="h-4 w-4" /> 
+                    {webhookUrl ? "Webhook configuré" : "Configurer webhook"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className="space-y-4">
+                    <h4 className="font-medium leading-none">Configuration webhook</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Connectez ce formulaire à Make.com (ou autre service) en fournissant l'URL du webhook.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <Input 
+                        placeholder="URL du webhook Make.com" 
+                        value={webhookUrl}
+                        onChange={(e) => setWebhookUrl(e.target.value)}
+                      />
+                      <Button 
+                        size="sm" 
+                        onClick={handleWebhookSave}
+                        disabled={!webhookUrl}
+                      >
+                        Enregistrer
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Les données du formulaire seront envoyées à cette URL lors de la soumission.
+                    </p>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="space-y-4">
+              <div className="border-b dark:border-zinc-800 mb-4 pb-2"></div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}

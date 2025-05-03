@@ -79,6 +79,9 @@ interface OrderFormValues {
   webhookUrl?: string;
 }
 
+// Define the default webhook URL as a constant
+const DEFAULT_WEBHOOK_URL = "https://hook.eu2.make.com/abcdefg123456789";
+
 const USER_PLAN = {
   articlesPerMonth: 4, 
   isPremium: true
@@ -125,15 +128,16 @@ const AUTHORITY_LEVELS = [
   { value: "very_high", label: "Très haute" }
 ];
 
-export default function OrderForm() {
+export default function OrderForm({ showWebhookSettings = false }) {
   const [submitting, setSubmitting] = useState(false);
   const [generating, setGenerating] = useState<string | null>(null);
   const [internalLinks, setInternalLinks] = useState<{title: string, url: string}[]>([]);
   const [newLink, setNewLink] = useState({ title: "", url: "" });
-  const [showWebhookSettings, setShowWebhookSettings] = useState(false);
+  // Only show webhook settings if user is an admin
+  const [showWebhookConfigPanel, setShowWebhookConfigPanel] = useState(false);
   
-  // Use the provided webhook URL as default
-  const [webhookUrl, setWebhookUrl] = useState("https://hook.eu2.make.com/abcdefg123456789");
+  // Use the default webhook URL
+  const [webhookUrl, setWebhookUrl] = useState(DEFAULT_WEBHOOK_URL);
   
   const form = useForm<OrderFormValues>({
     defaultValues: {
@@ -156,21 +160,23 @@ export default function OrderForm() {
       htmlType: "embed",
       confirmed: false,
       otherObjective: "",
-      webhookUrl: "https://hook.eu2.make.com/abcdefg123456789",
+      webhookUrl: DEFAULT_WEBHOOK_URL,
     }
   });
   
-  // Load saved webhook URL from localStorage
+  // Only for admins: Load custom webhook URL from localStorage
   useEffect(() => {
-    const savedWebhookUrl = localStorage.getItem("orderFormWebhookUrl");
-    if (savedWebhookUrl) {
-      setWebhookUrl(savedWebhookUrl);
-      form.setValue("webhookUrl", savedWebhookUrl);
-    } else {
-      // If no saved webhook, use the default one
-      localStorage.setItem("orderFormWebhookUrl", "https://hook.eu2.make.com/abcdefg123456789");
+    if (showWebhookSettings) {
+      const savedWebhookUrl = localStorage.getItem("orderFormWebhookUrl");
+      if (savedWebhookUrl) {
+        setWebhookUrl(savedWebhookUrl);
+        form.setValue("webhookUrl", savedWebhookUrl);
+      } else {
+        // If no saved webhook, use the default one
+        localStorage.setItem("orderFormWebhookUrl", DEFAULT_WEBHOOK_URL);
+      }
     }
-  }, [form]);
+  }, [form, showWebhookSettings]);
   
   const onSubmit = async (data: OrderFormValues) => {
     setSubmitting(true);
@@ -182,7 +188,7 @@ export default function OrderForm() {
       console.log("Form submitted:", data);
       
       // Always use the webhook URL - either custom or default
-      const hookUrl = data.webhookUrl || "https://hook.eu2.make.com/abcdefg123456789";
+      const hookUrl = data.webhookUrl || DEFAULT_WEBHOOK_URL;
       
       try {
         console.log("Sending data to webhook:", hookUrl);
@@ -220,7 +226,9 @@ export default function OrderForm() {
         setInternalLinks([]);
         
         // Reset form but keep the webhook URL
-        form.setValue("webhookUrl", webhookUrl);
+        if (showWebhookSettings) {
+          form.setValue("webhookUrl", webhookUrl);
+        }
       }, 1500);
       
     } catch (error) {
@@ -266,7 +274,7 @@ export default function OrderForm() {
   const handleWebhookSave = () => {
     form.setValue("webhookUrl", webhookUrl);
     localStorage.setItem("orderFormWebhookUrl", webhookUrl);
-    setShowWebhookSettings(false);
+    setShowWebhookConfigPanel(false);
     toast.success("Webhook enregistré", {
       description: "Votre webhook a été configuré avec succès.",
     });
@@ -282,43 +290,45 @@ export default function OrderForm() {
                 Informations de base
               </h2>
               
-              <Popover open={showWebhookSettings} onOpenChange={setShowWebhookSettings}>
-                <PopoverTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex items-center gap-1"
-                  >
-                    <LinkIcon className="h-4 w-4" /> 
-                    {webhookUrl ? "Webhook configuré" : "Configurer webhook"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <div className="space-y-4">
-                    <h4 className="font-medium leading-none">Configuration webhook</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Connectez ce formulaire à Make.com (ou autre service) en fournissant l'URL du webhook.
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      <Input 
-                        placeholder="URL du webhook Make.com" 
-                        value={webhookUrl}
-                        onChange={(e) => setWebhookUrl(e.target.value)}
-                      />
-                      <Button 
-                        size="sm" 
-                        onClick={handleWebhookSave}
-                        disabled={!webhookUrl}
-                      >
-                        Enregistrer
-                      </Button>
+              {showWebhookSettings && (
+                <Popover open={showWebhookConfigPanel} onOpenChange={setShowWebhookConfigPanel}>
+                  <PopoverTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-1"
+                    >
+                      <LinkIcon className="h-4 w-4" /> 
+                      {webhookUrl ? "Webhook configuré" : "Configurer webhook"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80">
+                    <div className="space-y-4">
+                      <h4 className="font-medium leading-none">Configuration webhook</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Connectez ce formulaire à Make.com (ou autre service) en fournissant l'URL du webhook.
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        <Input 
+                          placeholder="URL du webhook Make.com" 
+                          value={webhookUrl}
+                          onChange={(e) => setWebhookUrl(e.target.value)}
+                        />
+                        <Button 
+                          size="sm" 
+                          onClick={handleWebhookSave}
+                          disabled={!webhookUrl}
+                        >
+                          Enregistrer
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Les données du formulaire seront envoyées à cette URL lors de la soumission.
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Les données du formulaire seront envoyées à cette URL lors de la soumission.
-                    </p>
-                  </div>
-                </PopoverContent>
-              </Popover>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
 
             <div className="space-y-4">

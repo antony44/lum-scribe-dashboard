@@ -131,7 +131,9 @@ export default function OrderForm() {
   const [internalLinks, setInternalLinks] = useState<{title: string, url: string}[]>([]);
   const [newLink, setNewLink] = useState({ title: "", url: "" });
   const [showWebhookSettings, setShowWebhookSettings] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState("");
+  
+  // Use the provided webhook URL as default
+  const [webhookUrl, setWebhookUrl] = useState("https://hook.eu2.make.com/abcdefg123456789");
   
   const form = useForm<OrderFormValues>({
     defaultValues: {
@@ -154,7 +156,7 @@ export default function OrderForm() {
       htmlType: "embed",
       confirmed: false,
       otherObjective: "",
-      webhookUrl: "",
+      webhookUrl: "https://hook.eu2.make.com/abcdefg123456789",
     }
   });
   
@@ -164,6 +166,9 @@ export default function OrderForm() {
     if (savedWebhookUrl) {
       setWebhookUrl(savedWebhookUrl);
       form.setValue("webhookUrl", savedWebhookUrl);
+    } else {
+      // If no saved webhook, use the default one
+      localStorage.setItem("orderFormWebhookUrl", "https://hook.eu2.make.com/abcdefg123456789");
     }
   }, [form]);
   
@@ -176,34 +181,33 @@ export default function OrderForm() {
       // Save form data for local use
       console.log("Form submitted:", data);
       
-      // Trigger webhook if URL is provided
-      if (data.webhookUrl) {
-        try {
-          // Store webhook URL for future use
-          localStorage.setItem("orderFormWebhookUrl", data.webhookUrl);
-          
-          // Send data to webhook (Make.com)
-          const webhookResponse = await fetch(data.webhookUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            mode: "no-cors", // Needed for cross-origin requests
-            body: JSON.stringify({
-              ...data,
-              submittedAt: new Date().toISOString(),
-              source: "LUM Content Order Form"
-            }),
-          });
-          
-          console.log("Webhook triggered successfully");
-          
-        } catch (webhookError) {
-          console.error("Error triggering webhook:", webhookError);
-          toast.error("Erreur lors de l'envoi des données au webhook", {
-            description: "Vos données ont été enregistrées localement mais l'intégration avec Make a échoué.",
-          });
-        }
+      // Always use the webhook URL - either custom or default
+      const hookUrl = data.webhookUrl || "https://hook.eu2.make.com/abcdefg123456789";
+      
+      try {
+        console.log("Sending data to webhook:", hookUrl);
+        
+        // Send data to webhook (Make.com)
+        await fetch(hookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          mode: "no-cors", // Needed for cross-origin requests
+          body: JSON.stringify({
+            ...data,
+            submittedAt: new Date().toISOString(),
+            source: "LUM Content Order Form"
+          }),
+        });
+        
+        console.log("Webhook triggered successfully");
+        
+      } catch (webhookError) {
+        console.error("Error triggering webhook:", webhookError);
+        toast.error("Erreur lors de l'envoi des données au webhook", {
+          description: "Vos données ont été enregistrées localement mais l'intégration avec Make a échoué.",
+        });
       }
       
       setTimeout(() => {
@@ -214,6 +218,9 @@ export default function OrderForm() {
         
         form.reset();
         setInternalLinks([]);
+        
+        // Reset form but keep the webhook URL
+        form.setValue("webhookUrl", webhookUrl);
       }, 1500);
       
     } catch (error) {

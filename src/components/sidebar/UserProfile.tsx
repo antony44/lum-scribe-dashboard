@@ -56,7 +56,7 @@ export function UserProfile() {
       <div className="flex items-center space-x-3">
         <Avatar className="h-12 w-12 border-2 border-sidebar-border">
           <AvatarImage 
-            src={profile?.avatar_url} 
+            src={profile?.avatar_url || undefined} 
             alt={getName()}
           />
           <AvatarFallback>{getInitials()}</AvatarFallback>

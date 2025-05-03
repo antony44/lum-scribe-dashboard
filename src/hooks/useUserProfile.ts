@@ -14,6 +14,7 @@ export const useUserProfile = () => {
       last_name?: string;
       email?: string;
       avatar_url?: string;
+      current_plan?: string;
     }
   ) => {
     setIsLoading(true);
@@ -49,9 +50,16 @@ export const useUserProfile = () => {
       // First, ensure the storage bucket exists
       const bucketExists = await checkBucketExists('avatars');
       if (!bucketExists) {
-        console.error("The 'avatars' storage bucket does not exist");
-        toast.error("Configuration de stockage incorrecte");
-        return null;
+        // Create the avatars bucket if it doesn't exist
+        const { error: createBucketError } = await supabase.storage.createBucket('avatars', {
+          public: true
+        });
+        
+        if (createBucketError) {
+          console.error("Error creating 'avatars' bucket:", createBucketError);
+          toast.error("Impossible de configurer le stockage");
+          return null;
+        }
       }
 
       const fileExt = file.name.split('.').pop();

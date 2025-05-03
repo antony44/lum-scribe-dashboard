@@ -107,7 +107,9 @@ export type Database = {
       }
       Clients: {
         Row: {
+          avatar_url: string | null
           created_at: string | null
+          current_plan: string | null
           email: string
           first_name: string | null
           id_clients: string
@@ -116,7 +118,9 @@ export type Database = {
           stripe_customer_id: string | null
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string | null
+          current_plan?: string | null
           email: string
           first_name?: string | null
           id_clients?: string
@@ -125,7 +129,9 @@ export type Database = {
           stripe_customer_id?: string | null
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string | null
+          current_plan?: string | null
           email?: string
           first_name?: string | null
           id_clients?: string

@@ -121,9 +121,7 @@ const AccountProfileCard = () => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
-  // The clients table might not have an avatar_url field, 
-  // we'll need to update the useUserProfile hook to store this elsewhere
-  const avatarUrl = profile?.avatar_url;
+  const avatarUrl = profile?.avatar_url || null;
 
   return (
     <Card className="border shadow-sm animate-fade-in">

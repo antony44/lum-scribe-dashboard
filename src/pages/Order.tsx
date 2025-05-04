@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from "@/components/ui/sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
+import { Loader2 } from "lucide-react";
 
 const Order = () => {
+  const { user } = useAuth();
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
@@ -21,10 +24,64 @@ const Order = () => {
   const [objectif, setObjectif] = useState("");
   const [ton, setTon] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Charger les informations de l'utilisateur depuis la base de données
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('Clients')
+          .select('*')
+          .eq('id_clients', user.id)
+          .single();
+
+        if (error) {
+          console.error("Erreur lors de la récupération du profil:", error);
+          toast.error("Erreur lors du chargement de votre profil");
+        } else if (data) {
+          // Préremplir le formulaire avec les données du profil
+          setPrenom(data.first_name || "");
+          setNom(data.last_name || "");
+          setEmail(user.email || "");
+          setEntreprise(data.company_name || "");
+          
+          // Récupérer les données de la dernière commande de l'utilisateur pour le site web
+          const { data: lastOrderData, error: lastOrderError } = await supabase
+            .from('Commandes')
+            .select('lien_blog_site')
+            .eq('clients_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+          if (!lastOrderError && lastOrderData && lastOrderData.length > 0) {
+            setSiteWeb(lastOrderData[0].lien_blog_site || "");
+          }
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    if (!user) {
+      toast.error("Vous devez être connecté pour passer une commande");
+      setIsSubmitting(false);
+      return;
+    }
 
     // Préparer les données pour la base de données
     const formData = {
@@ -32,7 +89,7 @@ const Order = () => {
       objectif,
       contexte,
       categorie,
-      clients_id: '00000000-0000-0000-0000-000000000000', // Placeholder, sera remplacé par l'ID réel de l'utilisateur connecté
+      clients_id: user.id, // Utiliser l'ID de l'utilisateur authentifié
       created_at: new Date().toISOString(),
       company_name: entreprise,
       lien_blog_site: site_web,
@@ -57,12 +114,19 @@ const Order = () => {
       console.log('Commande enregistrée avec succès:', data);
       toast.success("Commande enregistrée avec succès !");
       
-      // Réinitialisation du formulaire après soumission réussie
-      setPrenom("");
-      setNom("");
-      setEmail("");
-      setEntreprise("");
-      setSiteWeb("");
+      // Mise à jour du profil utilisateur si nécessaire
+      if (entreprise) {
+        const { error: updateError } = await supabase
+          .from('Clients')
+          .update({ company_name: entreprise })
+          .eq('id_clients', user.id);
+
+        if (updateError) {
+          console.error('Erreur lors de la mise à jour du profil:', updateError);
+        }
+      }
+      
+      // Réinitialisation des champs qui ne sont pas des informations utilisateur
       setCategorie("");
       setContexte("");
       setSujet("");
@@ -75,6 +139,17 @@ const Order = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-6 flex justify-center items-center min-h-[60vh]">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Chargement de vos informations...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-6">
@@ -96,6 +171,8 @@ const Order = () => {
                   value={prenom} 
                   onChange={(e) => setPrenom(e.target.value)} 
                   required 
+                  readOnly={!!user} // Lecture seule si l'utilisateur est connecté
+                  className={user ? "bg-gray-100" : ""}
                 />
               </div>
               
@@ -106,6 +183,8 @@ const Order = () => {
                   value={nom} 
                   onChange={(e) => setNom(e.target.value)} 
                   required 
+                  readOnly={!!user} // Lecture seule si l'utilisateur est connecté
+                  className={user ? "bg-gray-100" : ""}
                 />
               </div>
             </div>
@@ -119,6 +198,8 @@ const Order = () => {
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)} 
                   required 
+                  readOnly={!!user} // Lecture seule si l'utilisateur est connecté
+                  className={user ? "bg-gray-100" : ""}
                 />
               </div>
               
@@ -216,7 +297,7 @@ const Order = () => {
             <Button 
               type="submit" 
               className="w-full" 
-              disabled={isSubmitting}
+              disabled={isSubmitting || !user}
             >
               {isSubmitting ? "Envoi en cours..." : "Commander l'article"}
             </Button>

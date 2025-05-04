@@ -254,7 +254,7 @@ const { data: insertedRows, error: insertError } = await supabase
   }]);
 
 if (insertError) {
-  console.error("Erreur insertion Commandes :", insertError);
+  console.error("Erreur insertion commandes :", insertError);
 } else {
   console.log("✅ commande insérée :", insertedRows);
 }

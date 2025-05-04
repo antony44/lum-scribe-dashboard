@@ -2,6 +2,7 @@
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard,
+  FileText,
   ChartBar,
   User,
   HelpCircle,
@@ -12,6 +13,7 @@ import {
 
 const navItems = [
   { label: "Tableau de Bord", path: "/", icon: LayoutDashboard },
+  { label: "Créer un Article", path: "/order", icon: FileText },
   { label: "Analytics", path: "/analytics", icon: ChartBar },
   { label: "Mon Compte", path: "/account", icon: User },
   { label: "Factures", path: "/invoices", icon: FileDocument },

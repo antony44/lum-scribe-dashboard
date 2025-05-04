@@ -1,58 +1,65 @@
 
 import { useState } from 'react';
-import { FormValues } from './types';
-import { useForm } from 'react-hook-form';
+import { OrderFormData } from './types';
 
-// Webhook URL par défaut
-const DEFAULT_WEBHOOK_URL = "https://hook.eu2.make.com/abcdefg123456789";
+export interface UseOrderFormStateResult {
+  formData: OrderFormData;
+  setFormData: (data: Partial<OrderFormData>) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+}
 
-export const useOrderFormState = (showWebhookSettings = false) => {
-  const [submitting, setSubmitting] = useState(false);
-  const [generating, setGenerating] = useState<string | null>(null);
-  const [internalLinks, setInternalLinks] = useState<{title: string, url: string}[]>([]);
-  const [newLink, setNewLink] = useState({ title: "", url: "" });
-  const [showWebhookConfigPanel, setShowWebhookConfigPanel] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState(DEFAULT_WEBHOOK_URL);
-  
-  const form = useForm<FormValues>({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      company: "",
-      website: "",
-      category: "",
-      companyContext: "",
-      objective: "",
-      topic: "",
-      tones: [],
-      contentType: "in_depth",
-      authority: "medium",
-      internalLinks: [],
-      bannedTopics: "",
-      useEmojis: "no",
-      useHtml: false,
-      htmlType: "embed",
-      confirmed: false,
-      otherObjective: "",
-      webhookUrl: DEFAULT_WEBHOOK_URL,
-    }
-  });
+export function useOrderFormState(): UseOrderFormStateResult {
+  // Form state
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [entreprise, setEntreprise] = useState("");
+  const [site_web, setSiteWeb] = useState("");
+  const [categorie, setCategorie] = useState("");
+  const [contexte, setContexte] = useState("");
+  const [sujet, setSujet] = useState("");
+  const [objectif, setObjectif] = useState("");
+  const [ton, setTon] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Combined form data object for easier updates
+  const formData = {
+    prenom,
+    nom,
+    email,
+    entreprise,
+    site_web,
+    categorie,
+    contexte,
+    sujet,
+    objectif,
+    ton
+  };
+
+  // Function to update form data
+  const setFormData = (data: Partial<OrderFormData>) => {
+    if (data.prenom !== undefined) setPrenom(data.prenom);
+    if (data.nom !== undefined) setNom(data.nom);
+    if (data.email !== undefined) setEmail(data.email);
+    if (data.entreprise !== undefined) setEntreprise(data.entreprise);
+    if (data.site_web !== undefined) setSiteWeb(data.site_web);
+    if (data.categorie !== undefined) setCategorie(data.categorie);
+    if (data.contexte !== undefined) setContexte(data.contexte);
+    if (data.sujet !== undefined) setSujet(data.sujet);
+    if (data.objectif !== undefined) setObjectif(data.objectif);
+    if (data.ton !== undefined) setTon(data.ton);
+  };
 
   return {
-    form,
-    submitting,
-    setSubmitting,
-    generating,
-    setGenerating,
-    internalLinks,
-    setInternalLinks,
-    newLink,
-    setNewLink,
-    showWebhookConfigPanel,
-    setShowWebhookConfigPanel,
-    webhookUrl,
-    setWebhookUrl,
-    DEFAULT_WEBHOOK_URL
+    formData,
+    setFormData,
+    isLoading,
+    setIsLoading,
+    isSubmitting,
+    setIsSubmitting
   };
-};
+}

@@ -1,12 +1,9 @@
-
 import React, { useState } from "react";
 import StatCard from "@/components/StatCard";
 import QuotaCircle from "@/components/QuotaCircle";
 import OrdersTable from "@/components/OrdersTable";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import OrderForm from "@/components/OrderForm";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const PRENOM = "Clara";
 const PLAN = "Plan Pro";
@@ -64,6 +61,20 @@ export default function Index() {
                 tooltip="La qualité des articles selon l'équipe éditoriale."
               />
             </div>
+            <Button
+              onClick={handleOrder}
+              className="w-full lg:w-auto mt-4 text-base py-3 bg-[#0061E0] hover:bg-[#0061E0]/90 dark:text-white"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin rounded-full border-2 border-primary border-r-transparent h-4 w-4 inline-block" /> 
+                  Chargement...
+                </span>
+              ) : (
+                <>COMMANDER UN NOUVEL ARTICLE</>
+              )}
+            </Button>
           </div>
         </div>
 
@@ -73,22 +84,9 @@ export default function Index() {
         </div>
       </div>
 
-      {/* Tabs for Order Form and Orders History */}
+      {/* Table: Historique des commandes */}
       <div className="px-2 lg:px-8 pb-10 w-full">
-        <Tabs defaultValue="order-form" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="order-form">Commander un article</TabsTrigger>
-            <TabsTrigger value="orders">Historique des commandes</TabsTrigger>
-          </TabsList>
-          <TabsContent value="order-form" className="pt-2">
-            <h2 className="text-2xl font-semibold mb-6">Commander un article</h2>
-            <OrderForm />
-          </TabsContent>
-          <TabsContent value="orders">
-            <h2 className="text-2xl font-semibold mb-6">Historique des commandes</h2>
-            <OrdersTable />
-          </TabsContent>
-        </Tabs>
+        <OrdersTable />
       </div>
     </div>
   );

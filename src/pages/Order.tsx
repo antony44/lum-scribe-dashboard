@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from "@/components/ui/sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -76,15 +75,30 @@ const Order = () => {
       } 
       // Sinon, pour un utilisateur anonyme, nous créons un nouveau client
       else {
-        // Insérer un nouveau client (autorisé par notre politique RLS)
+        // S'assurer que nous avons un plan par défaut dans la base de données
+        const { data: defaultPlanData, error: defaultPlanError } = await supabase
+          .from('Plans')
+          .select('id_plans')
+          .eq('nom', 'Basic')
+          .limit(1);
+
+        let defaultPlanId;
+        
+        if (defaultPlanError || !defaultPlanData || defaultPlanData.length === 0) {
+          // Utiliser un UUID fixe si aucun plan par défaut n'est trouvé
+          defaultPlanId = '00000000-0000-0000-0000-000000000000';
+        } else {
+          defaultPlanId = defaultPlanData[0].id_plans;
+        }
+
+        // Insérer un nouveau client
         const { data: clientData, error: clientError } = await supabase
           .from('Clients')
           .insert({
             first_name: prenom,
             last_name: nom,
             email: email,
-            // Utiliser l'ID de plan par défaut pour les clients sans compte
-            plans_id: '00000000-0000-0000-0000-000000000000'
+            plans_id: defaultPlanId
           })
           .select('id_clients');
 
@@ -105,6 +119,21 @@ const Order = () => {
         }
       }
 
+      // Récupérer l'ID du plan du client
+      const { data: clientPlanData, error: clientPlanError } = await supabase
+        .from('Clients')
+        .select('plans_id')
+        .eq('id_clients', clientId)
+        .single();
+
+      let planId;
+      if (clientPlanError || !clientPlanData) {
+        // Utiliser un UUID fixe si aucun plan n'est trouvé
+        planId = '00000000-0000-0000-0000-000000000000';
+      } else {
+        planId = clientPlanData.plans_id;
+      }
+
       // Insérer les données dans la table Commandes
       const { data: commandeData, error: commandeError } = await supabase
         .from('Commandes')
@@ -119,8 +148,7 @@ const Order = () => {
             objectif: objectif,
             ton: ton,
             statut: "nouvelle", // Statut par défaut pour une nouvelle commande
-            // Utiliser l'ID de plan par défaut
-            plans_id: '00000000-0000-0000-0000-000000000000'
+            plans_id: planId
           }
         ])
         .select();

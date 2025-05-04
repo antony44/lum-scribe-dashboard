@@ -27,62 +27,8 @@ const Order = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Insérer ou mettre à jour les données dans la table Clients
-      const { data: clientData, error: clientError } = await supabase
-        .from('Clients')
-        .upsert({
-          first_name: prenom,
-          last_name: nom,
-          email: email,
-          // Nous utilisons les valeurs par défaut pour les autres champs
-        }, { onConflict: 'email' })
-        .select('id_clients');
-
-      if (clientError) {
-        console.error("Erreur lors de la création du client:", clientError);
-        toast.error("Erreur lors de la création du client.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Récupération de l'ID client
-      const clientId = clientData?.[0]?.id_clients;
-      
-      if (!clientId) {
-        console.error("Impossible de récupérer l'ID client");
-        toast.error("Erreur lors du traitement de la commande.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2. Insérer les données dans la table Commandes
-      const { data: commandeData, error: commandeError } = await supabase
-        .from('Commandes')
-        .insert([
-          {
-            clients_id: clientId,
-            company_name: entreprise,
-            lien_blog_site: site_web,
-            categorie: categorie,
-            contexte: contexte,
-            sujet: sujet,
-            objectif: objectif,
-            ton: ton,
-            statut: "nouvelle", // Statut par défaut pour une nouvelle commande
-          }
-        ])
-        .select();
-
-      if (commandeError) {
-        console.error("Erreur lors de la création de la commande:", commandeError);
-        toast.error("Erreur lors de la création de la commande.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      console.log("Commande créée avec succès:", commandeData);
-
-      // Si l'insertion a réussi, nous envoyons également au webhook comme avant
+      // Pour le moment, on va seulement utiliser le webhook pour l'envoi des données
+      // à cause des erreurs de RLS sur les tables Clients et Commandes
       const formData = {
         prenom,
         nom,
@@ -118,10 +64,10 @@ const Order = () => {
         setObjectif("");
         setTon("");
       } else {
-        toast.warning("La commande a été enregistrée mais l'envoi au webhook a échoué.");
+        toast.error("Erreur lors de l'envoi de la commande.");
       }
     } catch (error) {
-      console.error("Erreur générale:", error);
+      console.error("Erreur envoi webhook:", error);
       toast.error("Erreur lors de l'envoi de la commande.");
     } finally {
       setIsSubmitting(false);

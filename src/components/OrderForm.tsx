@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client"; // en haut du fichier si pas déjà là
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
@@ -208,7 +209,6 @@ export default function OrderForm({ showWebhookSettings = false }) {
         });
         
         console.log("Webhook triggered successfully");
-        import { supabase } from "@/integrations/supabase/client"; // en haut du fichier si pas déjà là
 
 const session = await supabase.auth.getSession();
 const user = session.data.session?.user;

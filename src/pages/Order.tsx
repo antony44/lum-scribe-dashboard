@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
 
 const Order = () => {
   const [prenom, setPrenom] = useState("");
@@ -25,47 +26,51 @@ const Order = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Préparer les données pour la base de données
     const formData = {
-      prenom,
-      nom,
-      email,
-      entreprise,
-      site_web,
-      categorie,
-      contexte,
       sujet,
       objectif,
+      contexte,
+      categorie,
+      clients_id: '00000000-0000-0000-0000-000000000000', // Placeholder, sera remplacé par l'ID réel de l'utilisateur connecté
+      created_at: new Date().toISOString(),
+      company_name: entreprise,
+      lien_blog_site: site_web,
       ton,
+      statut: 'en_attente', // Statut initial de la commande
+      trigger_statut: new Date().toISOString(),
     };
 
     try {
-      const response = await fetch("https://hook.eu2.make.com/y4ohogsldw3jijjkzumub8vlkrt3b6kw", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      // Enregistrement dans la base de données Supabase
+      const { data, error } = await supabase
+        .from('Commandes')
+        .insert([formData])
+        .select();
 
-      if (response.ok) {
-        toast.success("Commande envoyée avec succès !");
-        // Reset form after successful submission
-        setPrenom("");
-        setNom("");
-        setEmail("");
-        setEntreprise("");
-        setSiteWeb("");
-        setCategorie("");
-        setContexte("");
-        setSujet("");
-        setObjectif("");
-        setTon("");
-      } else {
-        toast.error("Erreur lors de l'envoi de la commande.");
+      if (error) {
+        console.error('Erreur Supabase:', error);
+        toast.error("Erreur lors de l'enregistrement de la commande.");
+        return;
       }
+      
+      console.log('Commande enregistrée avec succès:', data);
+      toast.success("Commande enregistrée avec succès !");
+      
+      // Réinitialisation du formulaire après soumission réussie
+      setPrenom("");
+      setNom("");
+      setEmail("");
+      setEntreprise("");
+      setSiteWeb("");
+      setCategorie("");
+      setContexte("");
+      setSujet("");
+      setObjectif("");
+      setTon("");
     } catch (error) {
-      console.error("Erreur envoi webhook:", error);
-      toast.error("Erreur lors de l'envoi de la commande.");
+      console.error("Erreur lors de l'enregistrement:", error);
+      toast.error("Erreur lors de l'enregistrement de la commande.");
     } finally {
       setIsSubmitting(false);
     }

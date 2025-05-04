@@ -34,7 +34,7 @@ const Order = () => {
         
         // Fetch user profile data if available
         const { data, error } = await supabase
-          .from('Clients')
+          .from('clients')
           .select('first_name, last_name')
           .eq('id_clients', user.id)
           .single();
@@ -134,9 +134,9 @@ const Order = () => {
         planId = clientPlanData.plans_id;
       }
 
-      // Insérer les données dans la table Commandes
+      // Insérer les données dans la table commandes
       const { data: commandeData, error: commandeError } = await supabase
-        .from('Commandes')
+        .from('commandes')
         .insert([
           {
             clients_id: clientId,

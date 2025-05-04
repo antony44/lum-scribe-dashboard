@@ -68,12 +68,11 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
+      {/* Order page is accessible without authentication */}
       <Route path="/order" element={
-        <ProtectedRoute>
-          <AuthenticatedLayout>
-            <Order />
-          </AuthenticatedLayout>
-        </ProtectedRoute>
+        <AuthenticatedLayout>
+          <Order />
+        </AuthenticatedLayout>
       } />
       
       <Route path="/articles" element={

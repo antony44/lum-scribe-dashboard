@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from "@/components/ui/sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Order = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
@@ -21,14 +26,115 @@ const Order = () => {
   const [objectif, setObjectif] = useState("");
   const [ton, setTon] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Pre-fill form with user data if available
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (user) {
+        setEmail(user.email || '');
+        
+        // Fetch user profile data if available
+        const { data, error } = await supabase
+          .from('Clients')
+          .select('first_name, last_name')
+          .eq('id_clients', user.id)
+          .single();
+          
+        if (data && !error) {
+          setPrenom(data.first_name || '');
+          setNom(data.last_name || '');
+        }
+      }
+    };
+    
+    loadUserData();
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Pour le moment, on va seulement utiliser le webhook pour l'envoi des données
-      // à cause des erreurs de RLS sur les tables Clients et Commandes
+      let clientId = user?.id;
+      
+      // Si l'utilisateur est authentifié, nous utilisons son ID
+      if (user) {
+        // Mettre à jour les informations du client si nécessaire
+        const { error: updateError } = await supabase
+          .from('Clients')
+          .update({
+            first_name: prenom,
+            last_name: nom,
+            email: email,
+          })
+          .eq('id_clients', user.id);
+          
+        if (updateError) {
+          console.error("Erreur lors de la mise à jour du client:", updateError);
+          toast.error("Erreur lors de la mise à jour des informations client.");
+        }
+      } 
+      // Sinon, pour un utilisateur anonyme, nous créons un nouveau client
+      else {
+        // Insérer un nouveau client (autorisé par notre politique RLS)
+        const { data: clientData, error: clientError } = await supabase
+          .from('Clients')
+          .insert({
+            first_name: prenom,
+            last_name: nom,
+            email: email,
+            // Utiliser l'ID de plan par défaut pour les clients sans compte
+            plans_id: '00000000-0000-0000-0000-000000000000'
+          })
+          .select('id_clients');
+
+        if (clientError) {
+          console.error("Erreur lors de la création du client:", clientError);
+          toast.error("Erreur lors de la création du client.");
+          setIsSubmitting(false);
+          return;
+        }
+
+        clientId = clientData?.[0]?.id_clients;
+        
+        if (!clientId) {
+          console.error("Impossible de récupérer l'ID client");
+          toast.error("Erreur lors du traitement de la commande.");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Insérer les données dans la table Commandes
+      const { data: commandeData, error: commandeError } = await supabase
+        .from('Commandes')
+        .insert([
+          {
+            clients_id: clientId,
+            company_name: entreprise,
+            lien_blog_site: site_web,
+            categorie: categorie,
+            contexte: contexte,
+            sujet: sujet,
+            objectif: objectif,
+            ton: ton,
+            statut: "nouvelle", // Statut par défaut pour une nouvelle commande
+            // Utiliser l'ID de plan par défaut
+            plans_id: '00000000-0000-0000-0000-000000000000'
+          }
+        ])
+        .select();
+
+      if (commandeError) {
+        console.error("Erreur lors de la création de la commande:", commandeError);
+        toast.error("Erreur lors de la création de la commande.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("Commande créée avec succès:", commandeData);
+
+      // Envoyer également au webhook comme système de sauvegarde
       const formData = {
         prenom,
         nom,
@@ -42,32 +148,49 @@ const Order = () => {
         ton,
       };
 
-      const webhookResponse = await fetch("https://hook.eu2.make.com/y4ohogsldw3jijjkzumub8vlkrt3b6kw", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (webhookResponse.ok) {
-        toast.success("Commande envoyée avec succès !");
-        // Reset form after successful submission
-        setPrenom("");
-        setNom("");
-        setEmail("");
-        setEntreprise("");
-        setSiteWeb("");
-        setCategorie("");
-        setContexte("");
-        setSujet("");
-        setObjectif("");
-        setTon("");
-      } else {
-        toast.error("Erreur lors de l'envoi de la commande.");
+      try {
+        await fetch("https://hook.eu2.make.com/y4ohogsldw3jijjkzumub8vlkrt3b6kw", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      } catch (webhookError) {
+        console.error("Erreur envoi webhook (sauvegarde):", webhookError);
+        // Ne pas afficher d'erreur à l'utilisateur car les données sont déjà enregistrées en base
       }
+
+      toast.success("Commande envoyée avec succès !");
+      
+      // Si l'utilisateur n'est pas connecté, suggérer de créer un compte
+      if (!user) {
+        toast.info("Créez un compte pour suivre vos commandes", {
+          description: "Un compte vous permettra de gérer facilement vos articles.",
+          action: {
+            label: "S'inscrire",
+            onClick: () => navigate('/auth')
+          }
+        });
+      } else {
+        // Rediriger vers l'historique des commandes pour les utilisateurs connectés
+        navigate('/orders-history');
+      }
+      
+      // Reset form
+      setPrenom("");
+      setNom("");
+      setEmail("");
+      setEntreprise("");
+      setSiteWeb("");
+      setCategorie("");
+      setContexte("");
+      setSujet("");
+      setObjectif("");
+      setTon("");
+      
     } catch (error) {
-      console.error("Erreur envoi webhook:", error);
+      console.error("Erreur générale:", error);
       toast.error("Erreur lors de l'envoi de la commande.");
     } finally {
       setIsSubmitting(false);

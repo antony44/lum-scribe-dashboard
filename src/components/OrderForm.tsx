@@ -219,7 +219,7 @@ if (!user) {
 
 // ➋ Upsert (insert ou update) de la fiche client
 const { error: clientError } = await supabase
-  .from("Clients")
+  .from("clients")
   .upsert(
     [{
       clients_id:    user.id,          // PK/FK
@@ -232,11 +232,11 @@ const { error: clientError } = await supabase
   );
 
 if (clientError) {
-  console.error("Erreur upsert Clients :", clientError);
+  console.error("Erreur upsert clients :", clientError);
   // tu peux choisir d’interrompre ici ou de continuer quand même
 }
 const { data: insertedRows, error: insertError } = await supabase
-  .from("Commandes")
+  .from("commandes")
   .insert([{
     clients_id:     user.id,            // doit exister désormais
     sujet:          data.topic,
@@ -256,7 +256,7 @@ const { data: insertedRows, error: insertError } = await supabase
 if (insertError) {
   console.error("Erreur insertion Commandes :", insertError);
 } else {
-  console.log("✅ Commande insérée :", insertedRows);
+  console.log("✅ commande insérée :", insertedRows);
 }
 
 const session = await supabase.auth.getSession();
@@ -267,7 +267,7 @@ if (!user) {
   return;
 }
 
-const { error: insertError } = await supabase.from("Commandes").insert([
+const { error: insertError } = await supabase.from("commandes").insert([
   {
     sujet: data.topic,
     objectif: data.objective,

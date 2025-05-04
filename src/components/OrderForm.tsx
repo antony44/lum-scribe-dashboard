@@ -209,6 +209,55 @@ export default function OrderForm({ showWebhookSettings = false }) {
         });
         
         console.log("Webhook triggered successfully");
+// ➊ Récupère la session et l’utilisateur
+const { data: { session } } = await supabase.auth.getSession();
+const user = session?.user;
+if (!user) {
+  console.error("Utilisateur non authentifié.");
+  return;
+}
+
+// ➋ Upsert (insert ou update) de la fiche client
+const { error: clientError } = await supabase
+  .from("Clients")
+  .upsert(
+    [{
+      clients_id:    user.id,          // PK/FK
+      first_name:    data.firstName,
+      last_name:     data.lastName,
+      email:         data.email,
+      company_name:  data.company
+    }],
+    { onConflict: "clients_id" }
+  );
+
+if (clientError) {
+  console.error("Erreur upsert Clients :", clientError);
+  // tu peux choisir d’interrompre ici ou de continuer quand même
+}
+const { data: insertedRows, error: insertError } = await supabase
+  .from("Commandes")
+  .insert([{
+    clients_id:     user.id,            // doit exister désormais
+    sujet:          data.topic,
+    objectif:       data.objective,
+    contexte:       data.companyContext,
+    categorie:      data.category,
+    ton:            data.tones?.join(", "),
+    type_de_contenu:data.contentType,
+    autorite:       data.authority,
+    html_complet:   "Non",
+    emoji:          "Non",
+    statut:         "À traiter",
+    lien_blog_site: data.website,
+    company_name:   data.company
+  }]);
+
+if (insertError) {
+  console.error("Erreur insertion Commandes :", insertError);
+} else {
+  console.log("✅ Commande insérée :", insertedRows);
+}
 
 const session = await supabase.auth.getSession();
 const user = session.data.session?.user;

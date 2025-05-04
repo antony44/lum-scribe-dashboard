@@ -11,6 +11,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { Loader2 } from "lucide-react";
 
+// Définir un type pour les données du client qui inclut company_name
+interface ClientData {
+  avatar_url: string | null;
+  created_at: string | null;
+  current_plan: string | null;
+  email: string;
+  first_name: string | null;
+  id_clients: string;
+  last_name: string | null;
+  plans_id: string;
+  stripe_customer_id: string | null;
+  company_name?: string | null; // Ajout de company_name comme propriété optionnelle
+}
+
 const Order = () => {
   const { user } = useAuth();
   const [prenom, setPrenom] = useState("");
@@ -46,10 +60,11 @@ const Order = () => {
           toast.error("Erreur lors du chargement de votre profil");
         } else if (data) {
           // Préremplir le formulaire avec les données du profil
-          setPrenom(data.first_name || "");
-          setNom(data.last_name || "");
+          const clientData = data as ClientData;
+          setPrenom(clientData.first_name || "");
+          setNom(clientData.last_name || "");
           setEmail(user.email || "");
-          setEntreprise(data.company_name || "");
+          setEntreprise(clientData.company_name || "");
           
           // Récupérer les données de la dernière commande de l'utilisateur pour le site web
           const { data: lastOrderData, error: lastOrderError } = await supabase
@@ -116,9 +131,18 @@ const Order = () => {
       
       // Mise à jour du profil utilisateur si nécessaire
       if (entreprise) {
+        // Utiliser une interface partielle pour la mise à jour
+        interface ClientUpdate {
+          company_name?: string;
+        }
+        
+        const updateData: ClientUpdate = {
+          company_name: entreprise
+        };
+
         const { error: updateError } = await supabase
           .from('Clients')
-          .update({ company_name: entreprise })
+          .update(updateData)
           .eq('id_clients', user.id);
 
         if (updateError) {

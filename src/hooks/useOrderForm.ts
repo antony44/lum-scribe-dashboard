@@ -15,7 +15,7 @@ export interface ClientData {
   last_name: string | null;
   plans_id: string;
   stripe_customer_id: string | null;
-  company_name?: string | null;
+  company_name: string | null;
 }
 
 export interface OrderFormData {

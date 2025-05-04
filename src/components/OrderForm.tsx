@@ -208,7 +208,38 @@ export default function OrderForm({ showWebhookSettings = false }) {
         });
         
         console.log("Webhook triggered successfully");
-        
+        import { supabase } from "@/integrations/supabase/client"; // en haut du fichier si pas déjà là
+
+const session = await supabase.auth.getSession();
+const user = session.data.session?.user;
+
+if (!user) {
+  console.error("Utilisateur non authentifié.");
+  return;
+}
+
+const { error: insertError } = await supabase.from("Commandes").insert([
+  {
+    sujet: data.topic,
+    objectif: data.objective,
+    contexte: data.companyContext,
+    categorie: data.category,
+    ton: data.tones?.join(", "),
+    type_de_contenu: data.contentType,
+    autorite: data.authority,
+    html_complet: "Non",
+    emoji: "Non",
+    statut: "À traiter",
+    lien_blog_site: data.website,
+    company_name: data.company,
+    clients_id: user.id,
+  },
+]);
+
+if (insertError) {
+  console.error("Erreur insertion Supabase :", insertError.message);
+}
+
       } catch (webhookError) {
         console.error("Error triggering webhook:", webhookError);
         toast.error("Erreur lors de l'envoi des données au webhook", {

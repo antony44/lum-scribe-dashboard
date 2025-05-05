@@ -26,7 +26,6 @@ export default function Order() {
   const [ton, setTon] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Pré-remplir le formulaire avec le profil si connecté
   useEffect(() => {
     (async () => {
       if (user) {
@@ -51,7 +50,6 @@ export default function Order() {
       let clientId = user?.id;
 
       if (user) {
-        // Upsert client
         const { error: clientError } = await supabase
           .from('clients')
           .upsert([
@@ -68,7 +66,6 @@ export default function Order() {
           toast.error('Impossible de mettre à jour votre profil');
         }
       } else {
-        // Insérer un client anonyme avec plan par défaut
         const { data: planData } = await supabase
           .from('plans')
           .select('id_plans')
@@ -104,7 +101,6 @@ export default function Order() {
         return;
       }
 
-      // Récupérer le plan du client
       const { data: planInfo } = await supabase
         .from('clients')
         .select('plans_id')
@@ -112,7 +108,6 @@ export default function Order() {
         .single();
       const planId = planInfo?.plans_id || '00000000-0000-0000-0000-000000000000';
 
-      // Insérer la commande
       const { error: commandeError } = await supabase
         .from('commandes')
         .insert([
@@ -139,7 +134,6 @@ export default function Order() {
       toast.success('Commande créée avec succès !');
       navigate(user ? '/orders-history' : '/auth');
 
-      // Réinitialiser le formulaire
       setPrenom(''); setNom(''); setEmail(''); setEntreprise('');
       setSiteWeb(''); setCategorie(''); setContexte(''); setSujet('');
       setObjectif(''); setTon('');
@@ -156,28 +150,76 @@ export default function Order() {
       <h1 className="text-3xl font-bold mb-6">Commander un article</h1>
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle>Nouvelle commande</n          <CardDescription>Remplissez le formulaire pour commander.</CardDescription>
+          <CardTitle>Nouvelle commande</CardTitle>
+          <CardDescription>Remplissez le formulaire pour commander un nouvel article.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
-            {/* Champ prénom/nom */}
             <div className="grid md:grid-cols-2 gap-6">
-              <div><Label htmlFor="prenom">Prénom</Label><Input id="prenom" value={prenom} onChange={e => setPrenom(e.target.value)} required /></div>
-              <div><Label htmlFor="nom">Nom</Label><Input id="nom" value={nom} onChange={e => setNom(e.target.value)} required /></div>
+              <div>
+                <Label htmlFor="prenom">Prénom</Label>
+                <Input id="prenom" value={prenom} onChange={e => setPrenom(e.target.value)} required />
+              </div>
+              <div>
+                <Label htmlFor="nom">Nom</Label>
+                <Input id="nom" value={nom} onChange={e => setNom(e.target.value)} required />
+              </div>
             </div>
-            {/* Autres champs... */}
-            <div><Label htmlFor="email">Email</Label><Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required /></div>
-            <div><Label htmlFor="entreprise">Entreprise</Label><Input id="entreprise" value={entreprise} onChange={e => setEntreprise(e.target.value)} /></div>
-            <div><Label htmlFor="siteWeb">Site web</Label><Input id="siteWeb" type="url" value={siteWeb} onChange={e => setSiteWeb(e.target.value)} /></div>
-            <div><Label htmlFor="categorie">Catégorie</Label><Select value={categorie} onValueChange={setCategorie} required><SelectTrigger><SelectValue placeholder="Choisir..."/></SelectTrigger><SelectContent><SelectItem value="blog">Blog</SelectItem><SelectItem value="guide">Guide</SelectItem></SelectContent></Select></div>
-            <div><Label htmlFor="sujet">Sujet</Label><Input id="sujet" value={sujet} onChange={e => setSujet(e.target.value)} required /></div>
-            <div><Label htmlFor="contexte">Contexte</Label><Textarea id="contexte" value={contexte} onChange={e => setContexte(e.target.value)} rows={4} /></div>
-            <div><Label htmlFor="objectif">Objectif</Label><Textarea id="objectif" value={objectif} onChange={e => setObjectif(e.target.value)} rows={4} required /></div>
-            <div><Label htmlFor="ton">Ton</Label><Select value={ton} onValueChange={setTon}><SelectTrigger><SelectValue placeholder="Ton..."/></SelectTrigger><SelectContent><SelectItem value="formel">Formel</SelectItem><SelectItem value="humoristique">Humoristique</SelectItem></SelectContent></Select></div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+              </div>
+              <div>
+                <Label htmlFor="entreprise">Entreprise</Label>
+                <Input id="entreprise" value={entreprise} onChange={e => setEntreprise(e.target.value)} />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="siteWeb">Site web</Label>
+              <Input id="siteWeb" type="url" value={siteWeb} onChange={e => setSiteWeb(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="categorie">Catégorie</Label>
+              <Select value={categorie} onValueChange={setCategorie} required>
+                <SelectTrigger><SelectValue placeholder="Choisir..."/></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="blog">Blog</SelectItem>
+                  <SelectItem value="guide">Guide</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="sujet">Sujet</Label>
+              <Input id="sujet" value={sujet} onChange={e => setSujet(e.target.value)} required />
+            </div>
+            <div>
+              <Label htmlFor="contexte">Contexte</Label>
+              <Textarea id="contexte" value={contexte} onChange={e => setContexte(e.target.value)} rows={4} />
+            </div>
+            <div>
+              <Label htmlFor="objectif">Objectif</Label>
+              <Textarea id="objectif" value={objectif} onChange={e => setObjectif(e.target.value)} rows={4} required />
+            </div>
+            <div>
+              <Label htmlFor="ton">Ton</Label>
+              <Select value={ton} onValueChange={setTon}>
+                <SelectTrigger><SelectValue placeholder="Ton..."/></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="formel">Formel</SelectItem>
+                  <SelectItem value="humoristique">Humoristique</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </CardContent>
-          <CardFooter><Button type="submit" className="w-full" disabled={isSubmitting}>{isSubmitting ? 'Envoi...' : 'Commander l\'article'}</Button></CardFooter>
+          <CardFooter>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? 'Envoi...' : "Commander l'article"}
+            </Button>
+          </CardFooter>
         </form>
       </Card>
     </div>
   );
 }
+

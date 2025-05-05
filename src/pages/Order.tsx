@@ -32,8 +32,8 @@ export default function Order() {
         setEmail(user.email || '');
         const { data, error } = await supabase
           .from('clients')
-          .select('first_name, last_name')
-          .eq('id_clients', user.id)
+.select('first_name, last_name')
+.eq('clients_id', user.id)
           .single();
         if (!error && data) {
           setPrenom(data.first_name || '');
@@ -104,7 +104,7 @@ export default function Order() {
       const { data: planInfo } = await supabase
         .from('clients')
         .select('plans_id')
-        .eq('id_clients', clientId)
+        .eq('clients_id', user.id)
         .single();
       const planId = planInfo?.plans_id || '00000000-0000-0000-0000-000000000000';
 

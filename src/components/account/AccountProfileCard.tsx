@@ -93,7 +93,7 @@ const AccountProfileCard = () => {
       if (!user?.id) return null;
       
       const { data, error } = await supabase
-        .from('Clients')
+        .from('clients') // Changed from 'Clients' to 'clients'
         .select('*')
         .eq('id_clients', user.id)
         .single();

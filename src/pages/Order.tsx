@@ -28,14 +28,18 @@ export default function Order() {
   useEffect(() => {
     (async () => {
       if (user) {
-        const { data, error } = await supabase
-          .from('clients')
-          .select('company_name')
-          .eq('id_clients', user.id)
-          .single();
-        
-        if (!error && data) {
-          setEntreprise(data.company_name || '');
+        try {
+          const { data, error } = await supabase
+            .from('clients')
+            .select('company_name')
+            .eq('id_clients', user.id)
+            .single();
+          
+          if (!error && data) {
+            setEntreprise(data.company_name || '');
+          }
+        } catch (error) {
+          console.error('Error fetching company name:', error);
         }
       }
     })();

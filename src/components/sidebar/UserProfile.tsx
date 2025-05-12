@@ -18,7 +18,7 @@ export function UserProfile() {
       if (!user?.id) return null;
       
       const { data, error } = await supabase
-        .from('Clients')
+        .from('clients')
         .select('*')
         .eq('id_clients', user?.id)
         .single();

@@ -209,85 +209,57 @@ export default function OrderForm({ showWebhookSettings = false }) {
         });
         
         console.log("Webhook triggered successfully");
-// ➊ Récupère la session et l’utilisateur
-const { data: { session } } = await supabase.auth.getSession();
-const user = session?.user;
-if (!user) {
-  console.error("Utilisateur non authentifié.");
-  return;
-}
+        
+        // Get authenticated user data
+        const { data: { session } } = await supabase.auth.getSession();
+        const currentUser = session?.user;
+        if (!currentUser) {
+          console.error("Utilisateur non authentifié.");
+          return;
+        }
 
-// ➋ Upsert (insert ou update) de la fiche client
-const { error: clientError } = await supabase
-  .from("clients")
-  .upsert(
-    [{
-      clients_id:    user.id,          // PK/FK
-      first_name:    data.firstName,
-      last_name:     data.lastName,
-      email:         data.email,
-      company_name:  data.company
-    }],
-    { onConflict: "clients_id" }
-  );
+        // Upsert client data
+        const { error: clientError } = await supabase
+          .from("clients")
+          .upsert(
+            [{
+              id_clients: currentUser.id,
+              first_name: data.firstName,
+              last_name: data.lastName,
+              email: data.email,
+              company_name: data.company
+            }],
+            { onConflict: "id_clients" }
+          );
 
-if (clientError) {
-  console.error("Erreur upsert clients :", clientError);
-  // tu peux choisir d’interrompre ici ou de continuer quand même
-}
-const { data: insertedRows, error: insertError } = await supabase
-  .from("commandes")
-  .insert([{
-    clients_id:     user.id,            // doit exister désormais
-    sujet:          data.topic,
-    objectif:       data.objective,
-    contexte:       data.companyContext,
-    categorie:      data.category,
-    ton:            data.tones?.join(", "),
-    type_de_contenu:data.contentType,
-    autorite:       data.authority,
-    html_complet:   "Non",
-    emoji:          "Non",
-    statut:         "À traiter",
-    lien_blog_site: data.website,
-    company_name:   data.company
-  }]);
+        if (clientError) {
+          console.error("Erreur upsert clients :", clientError);
+        }
+        
+        // Insert order data
+        const { error: orderError } = await supabase
+          .from("commandes")
+          .insert([{
+            clients_id: currentUser.id,
+            sujet: data.topic,
+            objectif: data.objective,
+            contexte: data.companyContext,
+            categorie: data.category,
+            ton: data.tones?.join(", "),
+            type_de_contenu: data.contentType,
+            autorite: data.authority,
+            html_complet: data.useHtml ? data.htmlType : "Non",
+            emoji: data.useEmojis === "yes" ? "Oui" : "Non",
+            statut: "À traiter",
+            lien_blog_site: data.website,
+            company_name: data.company
+          }]);
 
-if (insertError) {
-  console.error("Erreur insertion commandes :", insertError);
-} else {
-  console.log("✅ commande insérée :", insertedRows);
-}
-
-const session = await supabase.auth.getSession();
-const user = session.data.session?.user;
-
-if (!user) {
-  console.error("Utilisateur non authentifié.");
-  return;
-}
-
-const { error: insertError } = await supabase.from("commandes").insert([
-  {
-    sujet: data.topic,
-    objectif: data.objective,
-    contexte: data.companyContext,
-    categorie: data.category,
-    ton: data.tones?.join(", "),
-    type_de_contenu: data.contentType,
-    autorite: data.authority,
-    html_complet: "Non",
-    emoji: "Non",
-    statut: "À traiter",
-    lien_blog_site: data.website,
-    company_name: data.company,
-    clients_id: user.id,
-  },
-]);
-
-if (insertError) {
-  console.error("Erreur insertion Supabase :", insertError.message);
-}
+        if (orderError) {
+          console.error("Erreur insertion commandes :", orderError);
+        } else {
+          console.log("✅ commande insérée");
+        }
 
       } catch (webhookError) {
         console.error("Error triggering webhook:", webhookError);

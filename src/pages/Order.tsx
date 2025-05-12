@@ -15,9 +15,6 @@ export default function Order() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [prenom, setPrenom] = useState('');
-  const [nom, setNom] = useState('');
-  const [email, setEmail] = useState('');
   const [entreprise, setEntreprise] = useState('');
   const [siteWeb, setSiteWeb] = useState('');
   const [categorie, setCategorie] = useState('');
@@ -31,16 +28,13 @@ export default function Order() {
   useEffect(() => {
     (async () => {
       if (user) {
-        setEmail(user.email || '');
         const { data, error } = await supabase
-          .from('Clients')
-          .select('first_name, last_name, company_name')
+          .from('clients')
+          .select('company_name')
           .eq('id_clients', user.id)
           .single();
         
         if (!error && data) {
-          setPrenom(data.first_name || '');
-          setNom(data.last_name || '');
           setEntreprise(data.company_name || '');
         }
       }
@@ -49,123 +43,81 @@ export default function Order() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast.error("Veuillez vous connecter pour commander un article");
+      navigate('/auth');
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
-      let clientId = user?.id;
-
-      // If user is authenticated, update their client record
-      if (user) {
-        const { error: clientError } = await supabase
-          .from('Clients')
-          .upsert([
-            {
-              id_clients: user.id,
-              first_name: prenom,
-              last_name: nom,
-              email,
-              company_name: entreprise,
-            }
-          ], { onConflict: 'id_clients' });
+      // Update client's company name if changed
+      const { error: clientError } = await supabase
+        .from('clients')
+        .upsert([
+          {
+            id_clients: user.id,
+            company_name: entreprise,
+          }
+        ], { onConflict: 'id_clients' });
           
-        if (clientError) {
-          console.error('Erreur upsert clients:', clientError);
-          toast.error('Impossible de mettre à jour votre profil');
-          setIsSubmitting(false);
-          return;
-        }
-      } 
-      // If user is not authenticated, create a new client
-      else {
-        // Get default plan
-        const { data: planData, error: planError } = await supabase
-          .from('Plans')
-          .select('id_plans')
-          .eq('nom', 'Basic')
-          .limit(1)
-          .single();
-          
-        if (planError) {
-          console.error('Erreur récupération plan par défaut:', planError);
-          toast.error('Impossible de récupérer le plan par défaut');
-          setIsSubmitting(false);
-          return;
-        }
-        
-        const defaultPlanId = planData?.id_plans;
-
-        // Create new client
-        const { data: clientData, error: insertClientError } = await supabase
-          .from('Clients')
-          .insert([
-            {
-              first_name: prenom,
-              last_name: nom,
-              email,
-              plans_id: defaultPlanId,
-              company_name: entreprise,
-            }
-          ])
-          .select('id_clients');
-          
-        if (insertClientError) {
-          console.error('Erreur création client:', insertClientError);
-          toast.error('Impossible de créer le client');
-          setIsSubmitting(false);
-          return;
-        }
-        
-        clientId = clientData?.[0]?.id_clients;
-      }
-
-      if (!clientId) {
-        toast.error('Identifiant client introuvable');
+      if (clientError) {
+        console.error('Erreur upsert clients:', clientError);
+        toast.error('Impossible de mettre à jour votre profil');
         setIsSubmitting(false);
         return;
       }
 
       // Get client's plan
-      let planId;
-      if (user) {
-        const { data: planInfo, error: planError } = await supabase
-          .from('Clients')
-          .select('plans_id')
-          .eq('id_clients', user.id)
-          .single();
+      const { data: planInfo, error: planError } = await supabase
+        .from('clients')
+        .select('plans_id')
+        .eq('id_clients', user.id)
+        .single();
           
-        if (planError) {
-          console.error('Erreur récupération plan client:', planError);
-          // Continue with default plan if error
-        } else {
-          planId = planInfo?.plans_id;
-        }
+      if (planError) {
+        console.error('Erreur récupération plan client:', planError);
+        toast.error('Impossible de récupérer votre plan');
+        setIsSubmitting(false);
+        return;
       }
+      
+      const planId = planInfo?.plans_id;
 
       if (!planId) {
         // Get default plan as fallback
-        const { data: defaultPlan } = await supabase
-          .from('Plans')
+        const { data: defaultPlan, error: defaultPlanError } = await supabase
+          .from('plans')
           .select('id_plans')
           .eq('nom', 'Basic')
           .limit(1)
           .single();
           
+        if (defaultPlanError) {
+          console.error('Erreur récupération plan par défaut:', defaultPlanError);
+          toast.error('Impossible de récupérer le plan par défaut');
+          setIsSubmitting(false);
+          return;
+        }
+        
         planId = defaultPlan?.id_plans;
       }
 
       // Create commande
       const { error: commandeError } = await supabase
-        .from('Commandes')
+        .from('commandes')
         .insert([
           {
-            clients_id: clientId,
-            company_name: entreprise, // Save company name directly
-            lien_blog_site: siteWeb, // Save website directly
-            categorie, // Save category directly
-            contexte, // Save context directly
-            sujet, // Save subject directly
-            objectif, // Save objective directly
-            ton, // Save tone directly
+            clients_id: user.id,
+            company_name: entreprise, 
+            lien_blog_site: siteWeb, 
+            categorie, 
+            contexte, 
+            sujet, 
+            objectif, 
+            ton, 
             statut: 'nouvelle',
             plans_id: planId,
           }
@@ -179,14 +131,9 @@ export default function Order() {
       }
 
       toast.success('Commande créée avec succès !');
-      
-      // Redirect authenticated users to orders history, others to auth
-      navigate(user ? '/orders-history' : '/auth');
+      navigate('/orders-history');
 
       // Reset form
-      setPrenom(''); 
-      setNom(''); 
-      setEmail(''); 
       setEntreprise('');
       setSiteWeb(''); 
       setCategorie(''); 
@@ -203,6 +150,25 @@ export default function Order() {
     }
   };
 
+  if (!user) {
+    return (
+      <div className="container mx-auto py-6">
+        <Card className="w-full max-w-4xl mx-auto">
+          <CardHeader>
+            <CardTitle>Connectez-vous pour commander</CardTitle>
+            <CardDescription>Vous devez être connecté pour commander un article.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center justify-center py-10">
+            <p className="mb-6 text-center">Veuillez vous connecter ou créer un compte pour commander un article.</p>
+            <Button onClick={() => navigate('/auth')}>
+              Se connecter / S'inscrire
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto py-6">
       <h1 className="text-3xl font-bold mb-6">Commander un article</h1>
@@ -213,25 +179,9 @@ export default function Order() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="prenom">Prénom</Label>
-                <Input id="prenom" value={prenom} onChange={e => setPrenom(e.target.value)} required />
-              </div>
-              <div>
-                <Label htmlFor="nom">Nom</Label>
-                <Input id="nom" value={nom} onChange={e => setNom(e.target.value)} required />
-              </div>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-              </div>
-              <div>
-                <Label htmlFor="entreprise">Entreprise</Label>
-                <Input id="entreprise" value={entreprise} onChange={e => setEntreprise(e.target.value)} />
-              </div>
+            <div>
+              <Label htmlFor="entreprise">Entreprise</Label>
+              <Input id="entreprise" value={entreprise} onChange={e => setEntreprise(e.target.value)} />
             </div>
             <div>
               <Label htmlFor="siteWeb">Site web</Label>

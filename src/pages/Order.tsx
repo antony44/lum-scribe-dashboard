@@ -84,7 +84,8 @@ export default function Order() {
         return;
       }
       
-      const planId = planInfo?.plans_id;
+      // Changed from const to let since we need to reassign it later
+      let planId = planInfo?.plans_id;
 
       if (!planId) {
         // Get default plan as fallback

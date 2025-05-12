@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { toast } from '@/components/ui/sonner';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -26,18 +27,21 @@ export default function Order() {
   const [ton, setTon] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Load user data if authenticated
   useEffect(() => {
     (async () => {
       if (user) {
         setEmail(user.email || '');
         const { data, error } = await supabase
-          .from('clients')
-.select('first_name, last_name')
-.eq('clients_id', user.id)
+          .from('Clients')
+          .select('first_name, last_name, company_name')
+          .eq('id_clients', user.id)
           .single();
+        
         if (!error && data) {
           setPrenom(data.first_name || '');
           setNom(data.last_name || '');
+          setEntreprise(data.company_name || '');
         }
       }
     })();
@@ -46,12 +50,14 @@ export default function Order() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
       let clientId = user?.id;
 
+      // If user is authenticated, update their client record
       if (user) {
         const { error: clientError } = await supabase
-          .from('clients')
+          .from('Clients')
           .upsert([
             {
               id_clients: user.id,
@@ -61,21 +67,36 @@ export default function Order() {
               company_name: entreprise,
             }
           ], { onConflict: 'id_clients' });
+          
         if (clientError) {
           console.error('Erreur upsert clients:', clientError);
           toast.error('Impossible de mettre à jour votre profil');
+          setIsSubmitting(false);
+          return;
         }
-      } else {
-        const { data: planData } = await supabase
-          .from('plans')
+      } 
+      // If user is not authenticated, create a new client
+      else {
+        // Get default plan
+        const { data: planData, error: planError } = await supabase
+          .from('Plans')
           .select('id_plans')
           .eq('nom', 'Basic')
           .limit(1)
           .single();
-        const defaultPlanId = planData?.id_plans || '00000000-0000-0000-0000-000000000000';
+          
+        if (planError) {
+          console.error('Erreur récupération plan par défaut:', planError);
+          toast.error('Impossible de récupérer le plan par défaut');
+          setIsSubmitting(false);
+          return;
+        }
+        
+        const defaultPlanId = planData?.id_plans;
 
+        // Create new client
         const { data: clientData, error: insertClientError } = await supabase
-          .from('clients')
+          .from('Clients')
           .insert([
             {
               first_name: prenom,
@@ -86,12 +107,14 @@ export default function Order() {
             }
           ])
           .select('id_clients');
+          
         if (insertClientError) {
           console.error('Erreur création client:', insertClientError);
           toast.error('Impossible de créer le client');
           setIsSubmitting(false);
           return;
         }
+        
         clientId = clientData?.[0]?.id_clients;
       }
 
@@ -101,29 +124,53 @@ export default function Order() {
         return;
       }
 
-      const { data: planInfo } = await supabase
-        .from('clients')
-        .select('plans_id')
-        .eq('clients_id', user.id)
-        .single();
-      const planId = planInfo?.plans_id || '00000000-0000-0000-0000-000000000000';
+      // Get client's plan
+      let planId;
+      if (user) {
+        const { data: planInfo, error: planError } = await supabase
+          .from('Clients')
+          .select('plans_id')
+          .eq('id_clients', user.id)
+          .single();
+          
+        if (planError) {
+          console.error('Erreur récupération plan client:', planError);
+          // Continue with default plan if error
+        } else {
+          planId = planInfo?.plans_id;
+        }
+      }
 
+      if (!planId) {
+        // Get default plan as fallback
+        const { data: defaultPlan } = await supabase
+          .from('Plans')
+          .select('id_plans')
+          .eq('nom', 'Basic')
+          .limit(1)
+          .single();
+          
+        planId = defaultPlan?.id_plans;
+      }
+
+      // Create commande
       const { error: commandeError } = await supabase
-        .from('commandes')
+        .from('Commandes')
         .insert([
           {
             clients_id: clientId,
-            company_name: entreprise,
-            lien_blog_site: siteWeb,
-            categorie,
-            contexte,
-            sujet,
-            objectif,
-            ton,
+            company_name: entreprise, // Save company name directly
+            lien_blog_site: siteWeb, // Save website directly
+            categorie, // Save category directly
+            contexte, // Save context directly
+            sujet, // Save subject directly
+            objectif, // Save objective directly
+            ton, // Save tone directly
             statut: 'nouvelle',
             plans_id: planId,
           }
         ]);
+        
       if (commandeError) {
         console.error('Erreur création commande:', commandeError);
         toast.error('Impossible de créer la commande');
@@ -132,11 +179,22 @@ export default function Order() {
       }
 
       toast.success('Commande créée avec succès !');
+      
+      // Redirect authenticated users to orders history, others to auth
       navigate(user ? '/orders-history' : '/auth');
 
-      setPrenom(''); setNom(''); setEmail(''); setEntreprise('');
-      setSiteWeb(''); setCategorie(''); setContexte(''); setSujet('');
-      setObjectif(''); setTon('');
+      // Reset form
+      setPrenom(''); 
+      setNom(''); 
+      setEmail(''); 
+      setEntreprise('');
+      setSiteWeb(''); 
+      setCategorie(''); 
+      setContexte(''); 
+      setSujet('');
+      setObjectif(''); 
+      setTon('');
+      
     } catch (err) {
       console.error('Erreur commande:', err);
       toast.error('Erreur inattendue');
@@ -222,4 +280,3 @@ export default function Order() {
     </div>
   );
 }
-

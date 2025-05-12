@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      Articles: {
+      articles: {
         Row: {
           alt_img: string | null
           clients_id: string
@@ -93,19 +93,19 @@ export type Database = {
             foreignKeyName: "Articles_clients_id_fkey"
             columns: ["clients_id"]
             isOneToOne: true
-            referencedRelation: "Clients"
+            referencedRelation: "clients"
             referencedColumns: ["id_clients"]
           },
           {
             foreignKeyName: "Articles_commandes_id_fkey"
             columns: ["commandes_id"]
             isOneToOne: true
-            referencedRelation: "Commandes"
+            referencedRelation: "commandes"
             referencedColumns: ["id_commandes"]
           },
         ]
       }
-      Clients: {
+      clients: {
         Row: {
           avatar_url: string | null
           created_at: string | null
@@ -144,12 +144,12 @@ export type Database = {
             foreignKeyName: "Clients_plans_id_fkey"
             columns: ["plans_id"]
             isOneToOne: true
-            referencedRelation: "Plans"
+            referencedRelation: "plans"
             referencedColumns: ["id_plans"]
           },
         ]
       }
-      Commandes: {
+      commandes: {
         Row: {
           autorite: string | null
           categorie: string | null
@@ -221,14 +221,14 @@ export type Database = {
             foreignKeyName: "Commandes_clients_id_fkey"
             columns: ["clients_id"]
             isOneToOne: true
-            referencedRelation: "Clients"
+            referencedRelation: "clients"
             referencedColumns: ["id_clients"]
           },
           {
             foreignKeyName: "Commandes_plans_id_fkey"
             columns: ["plans_id"]
             isOneToOne: true
-            referencedRelation: "Plans"
+            referencedRelation: "plans"
             referencedColumns: ["id_plans"]
           },
         ]
@@ -266,12 +266,12 @@ export type Database = {
             foreignKeyName: "factures_commandes_id_fkey"
             columns: ["commandes_id"]
             isOneToOne: true
-            referencedRelation: "Commandes"
+            referencedRelation: "commandes"
             referencedColumns: ["id_commandes"]
           },
         ]
       }
-      Plans: {
+      plans: {
         Row: {
           created_at: string
           cycle: string | null
@@ -319,7 +319,7 @@ export type Database = {
         }
         Relationships: []
       }
-      Quotas: {
+      quotas: {
         Row: {
           articles_restants: number
           clients_id: string
@@ -355,14 +355,14 @@ export type Database = {
             foreignKeyName: "Quotas_clients_id_fkey"
             columns: ["clients_id"]
             isOneToOne: true
-            referencedRelation: "Clients"
+            referencedRelation: "clients"
             referencedColumns: ["id_clients"]
           },
           {
             foreignKeyName: "Quotas_plans_id_fkey"
             columns: ["plans_id"]
             isOneToOne: true
-            referencedRelation: "Plans"
+            referencedRelation: "plans"
             referencedColumns: ["id_plans"]
           },
         ]

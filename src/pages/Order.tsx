@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from '@/components/ui/sonner';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -24,26 +23,8 @@ export default function Order() {
   const [ton, setTon] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load user data if authenticated
-  useEffect(() => {
-    (async () => {
-      if (user) {
-        try {
-          const { data, error } = await supabase
-            .from('clients')
-            .select('company_name')
-            .eq('id_clients', user.id)
-            .single();
-          
-          if (!error && data) {
-            setEntreprise(data.company_name || '');
-          }
-        } catch (error) {
-          console.error('Error fetching company name:', error);
-        }
-      }
-    })();
-  }, [user]);
+  // Load user data if authenticated - nous n'utilisons plus company_name car le champ n'existe pas
+  // dans la table clients selon les erreurs
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,23 +38,7 @@ export default function Order() {
     setIsSubmitting(true);
     
     try {
-      // Update client's company name if changed
-      const { error: clientError } = await supabase
-        .from('clients')
-        .upsert([
-          {
-            id_clients: user.id,
-            company_name: entreprise,
-          }
-        ], { onConflict: 'id_clients' });
-          
-      if (clientError) {
-        console.error('Erreur upsert clients:', clientError);
-        toast.error('Impossible de mettre à jour votre profil');
-        setIsSubmitting(false);
-        return;
-      }
-
+      // Nous ne mettons plus à jour le profil client car company_name n'existe pas
       // Get client's plan
       const { data: planInfo, error: planError } = await supabase
         .from('clients')
@@ -88,7 +53,7 @@ export default function Order() {
         return;
       }
       
-      // Changed from const to let since we need to reassign it later
+      // Changement de const à let pour éviter l'erreur de réassignation
       let planId = planInfo?.plans_id;
 
       if (!planId) {

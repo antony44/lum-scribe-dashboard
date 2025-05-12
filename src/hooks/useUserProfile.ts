@@ -19,9 +19,9 @@ export const useUserProfile = () => {
   ) => {
     setIsLoading(true);
     try {
-      // First check if the user has a profile in the Clients table
+      // First check if the user has a profile in the clients table
       const { data: existingProfile } = await supabase
-        .from('clients') // Changed from 'Clients' to 'clients'
+        .from('clients')
         .select('*')
         .eq('id_clients', user.id)
         .single();
@@ -31,13 +31,19 @@ export const useUserProfile = () => {
       if (existingProfile) {
         // Update existing profile
         result = await supabase
-          .from('clients') // Changed from 'Clients' to 'clients'
-          .update(profileData)
+          .from('clients')
+          .update({
+            first_name: profileData.first_name,
+            last_name: profileData.last_name,
+            email: profileData.email || user.email,
+            avatar_url: profileData.avatar_url,
+            current_plan: profileData.current_plan
+          })
           .eq('id_clients', user.id);
       } else {
         // Create new profile
         result = await supabase
-          .from('clients') // Changed from 'Clients' to 'clients'
+          .from('clients')
           .insert([{
             id_clients: user.id,
             email: profileData.email || user.email,

@@ -43,10 +43,10 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
     
-    // Parse request body for plan selection
+    // Parse request body for plan selection and billing cycle
     const requestBody = await req.json();
-    const { plan = "premium" } = requestBody;
-    logStep("Request parameters", { plan });
+    const { plan = "premium", cycle = "monthly" } = requestBody;
+    logStep("Request parameters", { plan, cycle });
     
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
     
@@ -86,15 +86,24 @@ serve(async (req) => {
       logStep("Updated Supabase with Stripe customer ID");
     }
     
-    // Define price IDs for different plans
-    // Note: Remplacez ces IDs par vos propres IDs de prix Stripe
-    const priceMap: Record<string, string> = {
-      basic: "price_1OYXazFA3UWwscGdKLW9LsxB", 
-      premium: "price_1OYXaVFA3UWwscGdmXyJCXQw", 
-      pro: "price_1OYXa0FA3UWwscGdfhzU5rqL"
+    // Define price IDs for different plans and billing cycles
+    const priceMap: Record<string, Record<string, string>> = {
+      basic: {
+        monthly: "price_1OYXazFA3UWwscGdKLW9LsxB",   // Free plan
+        yearly: "price_1OYXazFA3UWwscGdKLW9LsxB"     // Free plan (same ID)
+      },
+      premium: {
+        monthly: "price_1P7DFgFA3UWwscGdygtDPwIv",   // Premium mensuel
+        yearly: "price_1P7DFyFA3UWwscGdbb0QPyuk"     // Premium annuel
+      },
+      pro: {
+        monthly: "price_1P7DGfFA3UWwscGdDB8M0QCw",   // Pro mensuel
+        yearly: "price_1P7DGwFA3UWwscGdf5hGnlqA"     // Pro annuel
+      }
     };
     
-    const selectedPrice = priceMap[plan.toLowerCase()] || priceMap.premium;
+    const cycleKey = cycle === "yearly" ? "yearly" : "monthly";
+    const selectedPrice = priceMap[plan.toLowerCase()]?.[cycleKey] || priceMap.premium.monthly;
     
     const origin = req.headers.get("Origin") || "https://tqchxcrrzixqeywsbmfg.supabase.co";
     
@@ -110,6 +119,16 @@ serve(async (req) => {
       mode: "subscription",
       success_url: `${origin}/account?checkout_success=true`,
       cancel_url: `${origin}/account?checkout_cancelled=true`,
+      allow_promotion_codes: true,
+      billing_address_collection: "auto",
+      customer_update: {
+        address: "auto"
+      },
+      payment_method_types: ["card"],
+      metadata: {
+        plan_type: plan,
+        billing_cycle: cycle
+      }
     });
     
     logStep("Created checkout session", { sessionId: session.id, url: session.url });

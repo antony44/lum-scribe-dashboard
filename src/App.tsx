@@ -20,6 +20,7 @@ import Resources from "./pages/Resources";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import OrdersHistoryPage from "./pages/OrdersHistory";
+import Plans from "./pages/Plans";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -111,6 +112,14 @@ const AppRoutes = () => {
         <ProtectedRoute>
           <AuthenticatedLayout>
             <Account />
+          </AuthenticatedLayout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/plans" element={
+        <ProtectedRoute>
+          <AuthenticatedLayout>
+            <Plans />
           </AuthenticatedLayout>
         </ProtectedRoute>
       } />

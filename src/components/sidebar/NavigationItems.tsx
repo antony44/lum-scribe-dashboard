@@ -8,7 +8,8 @@ import {
   HelpCircle,
   FileText as FileDocument,
   LifeBuoy,
-  BookOpen
+  BookOpen,
+  CreditCard
 } from "lucide-react";
 
 const navItems = [
@@ -16,6 +17,7 @@ const navItems = [
   { label: "Créer un Article", path: "/order", icon: FileText },
   { label: "Analytics", path: "/analytics", icon: ChartBar },
   { label: "Mon Compte", path: "/account", icon: User },
+  { label: "Plans & Tarifs", path: "/plans", icon: CreditCard },
   { label: "Factures", path: "/invoices", icon: FileDocument },
   { label: "FAQ", path: "/faq", icon: HelpCircle },
   { label: "Ressources", path: "/resources", icon: BookOpen },

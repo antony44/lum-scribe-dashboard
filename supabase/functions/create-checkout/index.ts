@@ -87,11 +87,11 @@ serve(async (req) => {
     }
     
     // Define price IDs for different plans
-    // You should replace these with your actual Stripe price IDs
-    const priceMap = {
-      basic: "price_basic", // Replace with your actual price ID
-      premium: "price_premium", // Replace with your actual price ID
-      pro: "price_pro" // Replace with your actual price ID
+    // Note: Remplacez ces IDs par vos propres IDs de prix Stripe
+    const priceMap: Record<string, string> = {
+      basic: "price_1OYXazFA3UWwscGdKLW9LsxB", 
+      premium: "price_1OYXaVFA3UWwscGdmXyJCXQw", 
+      pro: "price_1OYXa0FA3UWwscGdfhzU5rqL"
     };
     
     const selectedPrice = priceMap[plan.toLowerCase()] || priceMap.premium;
@@ -103,7 +103,7 @@ serve(async (req) => {
       customer: customerId,
       line_items: [
         {
-          price: selectedPrice, // Replace with your actual price ID
+          price: selectedPrice,
           quantity: 1,
         },
       ],

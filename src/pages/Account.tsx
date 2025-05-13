@@ -13,8 +13,39 @@ import AccountSecurityCard from "@/components/account/AccountSecurityCard";
 import AccountSubscriptionCard from "@/components/account/AccountSubscriptionCard";
 import AccountInvoicesCard from "@/components/account/AccountInvoicesCard";
 import AccountActionsCard from "@/components/account/AccountActionsCard";
+import AvailablePlans from "@/components/account/AvailablePlans";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
+import { useSearchParams } from "react-router-dom";
 
 const Account = () => {
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const checkoutSuccess = searchParams.get('checkout_success');
+  const checkoutCancelled = searchParams.get('checkout_cancelled');
+
+  const { data: subscription } = useQuery({
+    queryKey: ['subscription', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data, error } = await supabase.functions.invoke('check-subscription');
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+    refetchOnWindowFocus: false,
+  });
+
+  // Afficher un toast si l'utilisateur revient après un checkout
+  React.useEffect(() => {
+    if (checkoutSuccess === 'true') {
+      toast.success("Abonnement souscrit avec succès");
+    } else if (checkoutCancelled === 'true') {
+      toast.info("Processus d'abonnement annulé");
+    }
+  }, [checkoutSuccess, checkoutCancelled]);
+
   return (
     <div className="py-6">
       <div className="mb-8">
@@ -33,6 +64,10 @@ const Account = () => {
         
         <div className="col-span-1 md:col-span-3">
           <AccountSubscriptionCard />
+        </div>
+        
+        <div className="col-span-1 md:col-span-7">
+          <AvailablePlans currentPlan={subscription?.subscription_tier} />
         </div>
         
         <div className="col-span-1 md:col-span-7">

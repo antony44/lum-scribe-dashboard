@@ -21,6 +21,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import OrdersHistoryPage from "./pages/OrdersHistory";
 import Plans from "./pages/Plans";
+import TestCheckout from "./pages/TestCheckout";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -120,6 +121,14 @@ const AppRoutes = () => {
         <ProtectedRoute>
           <AuthenticatedLayout>
             <Plans />
+          </AuthenticatedLayout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/test-checkout" element={
+        <ProtectedRoute>
+          <AuthenticatedLayout>
+            <TestCheckout />
           </AuthenticatedLayout>
         </ProtectedRoute>
       } />

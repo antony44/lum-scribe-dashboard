@@ -45,8 +45,8 @@ serve(async (req) => {
     
     // Parse request body for plan selection and billing cycle
     const requestBody = await req.json();
-    const { plan = "premium", cycle = "monthly" } = requestBody;
-    logStep("Request parameters", { plan, cycle });
+    const { cycle = "monthly" } = requestBody;
+    logStep("Request parameters", { cycle });
     
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
     
@@ -86,56 +86,13 @@ serve(async (req) => {
       logStep("Updated Supabase with Stripe customer ID");
     }
     
-    // Utiliser l'ID du produit spécifié et récupérer les prix associés
-    const productId = "prod_SIwLDKuvnswRD0"; // L'ID de produit fourni par l'utilisateur
+    // Use test mode prices instead of trying to use live mode prices
+    // Define prices depending on the cycle (monthly/yearly)
+    const priceId = cycle === "yearly" 
+      ? "price_1OxSHUF8RLmO5r7S9z6s9zLe" // Test yearly price ID
+      : "price_1OxSGsF8RLmO5r7SL31aqE6j"; // Test monthly price ID
     
-    // Récupérer tous les prix associés à ce produit
-    const pricesList = await stripe.prices.list({
-      product: productId,
-      active: true,
-      limit: 10
-    });
-    
-    if (pricesList.data.length === 0) {
-      throw new Error(`No active prices found for product ${productId}`);
-    }
-    
-    logStep("Retrieved prices for product", { 
-      productId,
-      pricesCount: pricesList.data.length,
-      prices: pricesList.data.map(p => ({
-        id: p.id,
-        amount: p.unit_amount,
-        currency: p.currency,
-        recurring: p.recurring ? p.recurring.interval : null
-      }))
-    });
-    
-    // Sélectionner le prix approprié en fonction du cycle
-    let selectedPrice;
-    
-    // Rechercher un prix correspondant au cycle demandé
-    if (cycle === "yearly") {
-      selectedPrice = pricesList.data.find(p => p.recurring && p.recurring.interval === "year");
-    } else {
-      selectedPrice = pricesList.data.find(p => p.recurring && p.recurring.interval === "month");
-    }
-    
-    // Si aucun prix correspondant n'est trouvé, prendre le premier prix disponible
-    if (!selectedPrice) {
-      selectedPrice = pricesList.data[0];
-      logStep("No price found for requested cycle, using fallback price", {
-        cycle,
-        selectedPriceId: selectedPrice.id,
-        interval: selectedPrice.recurring ? selectedPrice.recurring.interval : "one-time"
-      });
-    } else {
-      logStep("Selected price", {
-        priceId: selectedPrice.id,
-        amount: selectedPrice.unit_amount,
-        interval: selectedPrice.recurring ? selectedPrice.recurring.interval : "one-time"
-      });
-    }
+    logStep("Using test price", { priceId, cycle });
     
     const origin = req.headers.get("Origin") || "https://tqchxcrrzixqeywsbmfg.supabase.co";
     
@@ -144,11 +101,11 @@ serve(async (req) => {
       customer: customerId,
       line_items: [
         {
-          price: selectedPrice.id,
+          price: priceId,
           quantity: 1,
         },
       ],
-      mode: selectedPrice.recurring ? "subscription" : "payment",
+      mode: "subscription",
       success_url: `${origin}/account?checkout_success=true`,
       cancel_url: `${origin}/account?checkout_cancelled=true`,
       allow_promotion_codes: true,
@@ -158,7 +115,6 @@ serve(async (req) => {
       },
       payment_method_types: ["card"],
       metadata: {
-        plan_type: plan,
         billing_cycle: cycle
       }
     });
